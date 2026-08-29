@@ -13,7 +13,9 @@ Clean imitation of one author is pastiche and reads as such. A blend is how voic
 
 ## Pairing
 
-Blends work when the authors are unlike each other on the borrowed dimensions. Hemingway's selection with Woolf's distance produces something neither wrote. Two similar architectures produce a blend indistinguishable from either — if the user requests that, say so and suggest a more distant pairing.
+Blends work when the two sources are unlike each other on the borrowed dimensions. Hemingway's selection with Woolf's distance produces something neither wrote. Two similar architectures produce a blend indistinguishable from either — if the user requests that, say so and suggest a more distant pairing.
+
+An author may be blended with a register (Hemingway's selection over the journalistic inverted pyramid; Woolf's distance in an academic frame). Same procedure — assign dimensions, don't average.
 
 ## Rules
 

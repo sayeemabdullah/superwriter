@@ -1,10 +1,12 @@
 # superwriter
 
-A Claude skill that writes in a named author's manner — either generating new text in that
-voice, or rewriting text you supply while keeping its meaning intact.
+A Claude skill that writes in a named author's manner — or in a functional writing
+register — either generating new text in that style, or rewriting text you supply while
+keeping its meaning intact.
 
-Twelve public-domain voices, plus tools to profile your own style and to blend two
-influences. The skill decomposes each voice into ten craft dimensions (rhythm, syntax,
+Twelve public-domain author voices and six registers (plain English, academic, journalistic,
+corporate, legal, technical), plus tools to profile your own style and to blend two
+influences. The skill decomposes each style into ten craft dimensions (rhythm, syntax,
 narrative distance, selection, and so on) rather than storing surface tics, so the output
 reads as the writer's *manner* rather than as costume.
 
@@ -35,6 +37,8 @@ brief.
 /superwriter Hemingway — a scene where two people decide to separate
 /superwriter Austen — a letter politely declining a dinner invitation
 /superwriter Woolf — a paragraph about waiting for a train
+/superwriter journalistic — a 150-word story on a local bridge closure
+/superwriter plain English — instructions for resetting a password
 ```
 
 ### Transform — rewrite existing text in a voice
@@ -50,6 +54,9 @@ We're pulling the launch forward to October and holding headcount flat.
 
 /superwriter Orwell
 ```
+
+Registers work the same way — `/superwriter academic`, `/superwriter legal`,
+`/superwriter corporate` — and are often the more practical choice for real documents.
 
 A short prompt is treated as *generate*; more than a paragraph of supplied text is treated
 as *transform*. If it's ambiguous, say which you want.
@@ -79,7 +86,10 @@ Works best when the two writers are unlike each other.
 ```
 /superwriter blend Hemingway + Woolf — a scene at a hospital bedside
 /superwriter blend Twain + Kafka — a man tries to renew a permit
+/superwriter blend Hemingway + journalistic — a dispatch from a flooded town
 ```
+
+An author may be blended with a register, not just with another author.
 
 ## The twelve voices
 
@@ -98,9 +108,22 @@ Works best when the two writers are unlike each other.
 | **Melville** | Register shifting without warning — manual to sermon to soliloquy; digression as structure. |
 | **Chekhov** | Refusal to conclude; moral neutrality toward characters the reader expects him to judge. |
 
-No profile for the author you asked for? The skill says so and offers the nearest voice, or
-to work from a passage you supply as a model — it won't improvise a profile from general
-impressions, because that produces caricature.
+## The six registers
+
+Functional styles rather than individual writers — defined by the job the text has to do.
+
+| Register | Furthest from neutral |
+|---|---|
+| **Plain English** | Low syntactic load as policy; the reader's task as the organizing principle; abstraction actively removed. |
+| **Academic** | Claims hedged to their real strength and attributed; nominalized abstraction; the field foregrounded over the writer. |
+| **Journalistic** | Inverted pyramid; every contestable claim attributed; the paragraph as the unit, one or two sentences each. |
+| **Corporate / Business** | Conclusion first (BLUF); action and owner named; brevity as respect for the reader's time. |
+| **Legal / Contractual** | Precision over readability by design; defined terms in place of pronouns; exhaustive enumeration. |
+| **Technical** | Reader is mid-task; imperative mood; structure optimized for scanning and non-linear entry. |
+
+No profile for the author or register you asked for? The skill says so and offers the
+nearest one, or to work from a passage you supply as a model — it won't improvise a profile
+from general impressions, because that produces caricature.
 
 ## Worked example
 
@@ -133,11 +156,14 @@ superwriter/
     ├── transform.md              # Transform procedure + content-drift checks
     ├── analysis.md
     ├── blending.md
-    └── authors/                  # 12 profiles, one per voice
+    ├── authors/                  # 12 author profiles
+    └── registers/                # 6 functional-register profiles
 ```
 
-Only `SKILL.md` + `craft-dimensions.md` + one author profile load per request (~7.8 KB) —
-the token budget is a deliberate design constraint.
+Only `SKILL.md` + `craft-dimensions.md` + **one** profile load per request (~8.4 KB
+worst case) — the token budget is a deliberate design constraint. Adding registers doesn't
+change the worst case: each register profile is smaller than the largest author profile,
+and still only one profile loads per request.
 
 ## Standing rules
 
@@ -155,7 +181,7 @@ for a public repo — add your own profiles locally if you want them.
 
 - `bash scripts/validate_skill.sh` — checks the `superwriter/` source: two-key frontmatter,
   one-line description, `name: superwriter`, 4 reference files, exactly 12 author profiles,
-  and every voice in `SKILL.md` backed by a profile file.
+  exactly 6 register profiles, and every voice listed in `SKILL.md` backed by a profile file.
 - `bash scripts/package_skill.sh` — builds `superwriter.skill` (a ZIP with `superwriter/` at
   the archive root; `.skill` is just a renamed ZIP).
 
@@ -170,9 +196,11 @@ git tag v2
 git push origin v2
 ```
 
-### Adding an author
+### Adding an author or register
 
-Copy an existing profile in `references/authors/`, keep the same ten-part shape and
-compression, name where the writer sits furthest from neutral, and end with the caricature
-failure to avoid. Then add the name to the voice list in `SKILL.md` **and to the
-`description` field** — skipping that last step means the voice never triggers.
+Copy an existing profile from `references/authors/` (or `references/registers/`), keep the
+same ten-part shape and compression, name where the style sits furthest from neutral, and
+end with the caricature failure to avoid. Then add the name to the Voices list in `SKILL.md`
+**and to the `description` field** — skipping that last step means it never triggers. Keep
+new profiles at or below the size of the largest existing one so the per-request budget
+holds.
