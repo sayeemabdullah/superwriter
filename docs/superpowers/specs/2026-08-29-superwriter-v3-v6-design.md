@@ -96,7 +96,10 @@ Non-signature dimensions stay near neutral at every strength.
   reads only this file.
 - `validate_skill.sh`: run `build_index.sh` to a temp file, `diff` against the committed
   `references/voices.md`; any mismatch fails with "voices.md is stale — run
-  scripts/build_index.sh".
+  scripts/build_index.sh". The existing "`references/` has exactly 4 top-level `.md`"
+  assertion is replaced by "all required files present (`craft-dimensions`, `transform`,
+  `analysis`, `blending`) and no top-level `.md` outside that set plus the allowed generated
+  file `voices.md`".
 
 Per-request cost: **zero** (read only on `/superwriter list`).
 
@@ -170,8 +173,8 @@ caricature failure, e.g.:
 - `references/form-dimensions.md` exists.
 - `references/forms/` has exactly 6 `.md`.
 - Every form under `## Voices` → **Forms** is backed by a file.
-- The top-level `references/` count check changes from **exactly 4 `.md`** to **exactly 5**
-  (adds `form-dimensions.md`). Call this out explicitly in the v4 plan.
+- `form-dimensions` is added to the required top-level `references/` set (from v3: all
+  required present, no unexpected extras beyond generated `voices.md`).
 - `build_index.sh` now includes `forms/`; `voices.md` regenerated.
 
 ### D — files touched
@@ -182,7 +185,8 @@ new), `superwriter/SKILL.md`, `superwriter/references/blending.md`, `scripts/bui
 
 ### D — verification
 
-- Validator passes; `references/` has 5 top-level `.md`.
+- Validator passes; `references/` top-level set is `craft-dimensions`, `transform`,
+  `analysis`, `blending`, `form-dimensions`, plus generated `voices.md`.
 - `voices.md` up to date.
 - Worst-case footprint for a form request (`SKILL.md` + `craft-dimensions.md` +
   `form-dimensions.md` + largest form profile) ≤ 10 KB.
@@ -321,7 +325,9 @@ Added to `analysis.md` and `SKILL.md` standing rules:
 
 - frontmatter: exactly two keys (`name`, `description`), `name: superwriter`, one-line
   description, no blank line before the closing `---`;
-- `references/` top-level `.md` count: 4 through v3, **5** from v4 (`form-dimensions.md`);
+- `references/` top-level `.md`: all required files present — `craft-dimensions`,
+  `transform`, `analysis`, `blending` (plus `form-dimensions` from v4) — and no top-level
+  `.md` outside that set except the generated `voices.md` (added v3);
 - `authors/` = 12; `registers/` = 6; `forms/` = 6 (v4+);
 - `examples/` 1:1 with profiles across `authors|registers|forms` (v5+);
 - `custom/` present with `README.md`; any other `custom/*.md` passes author shape (v6+);
