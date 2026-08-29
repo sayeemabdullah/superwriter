@@ -14,6 +14,8 @@ Detect by whether substantial source text is present. Ambiguous: short prompt = 
 
 A "voice" is either a named author or a functional **register** (plain English, academic, journalistic, etc.). Both modes work with either, and the treatment is identical.
 
+Optional strength — `light`, `medium` (default), or `strong` — may follow the voice name; see **Strength** below.
+
 ## Routing
 
 Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. Two profiles only for a blend.
@@ -27,7 +29,17 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 
 ## Commands
 
-`/superwriter <author|register>` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+`/superwriter <author|register> [light|medium|strong]` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+
+## Strength
+
+`light` · `medium` (default) · `strong` — how far to push the signature dimensions.
+
+- **light** — one signature dimension, gently. Reads as "influenced by," not pastiche.
+- **medium** — the two or three signature dimensions pushed. Default when unspecified.
+- **strong** — signature dimensions pushed hard, still stopping short of the caricature failure.
+
+Non-signature dimensions stay near neutral at every strength.
 
 ## Voices
 

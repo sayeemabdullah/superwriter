@@ -131,6 +131,16 @@ else
   err "SKILL.md must route /superwriter list to references/voices.md"
 fi
 
+# --- SKILL.md documents the strength dial ---
+if grep -q '^## Strength' "$SKILL_DIR/SKILL.md" \
+   && grep -Eq '\blight\b'  "$SKILL_DIR/SKILL.md" \
+   && grep -Eq '\bmedium\b' "$SKILL_DIR/SKILL.md" \
+   && grep -Eq '\bstrong\b' "$SKILL_DIR/SKILL.md"; then
+  ok "SKILL.md documents the strength dial (light/medium/strong)"
+else
+  err "SKILL.md must have a ## Strength section naming light, medium, and strong"
+fi
+
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
   echo "validation FAILED" >&2
