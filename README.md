@@ -170,12 +170,12 @@ superwriter/
     ├── transform.md              # Transform procedure + content-drift checks
     ├── analysis.md
     ├── blending.md
+    ├── voices.md                 # Generated index — loads only on /superwriter list
     ├── authors/                  # 12 author profiles
     └── registers/                # 6 functional-register profiles
 ```
 
-Only `SKILL.md` + `craft-dimensions.md` + **one** profile load per request (~8.4 KB
-worst case) — the token budget is a deliberate design constraint. Adding registers doesn't
+Only `SKILL.md` + `craft-dimensions.md` + **one** profile load per request (~9.6 KB worst case, against a 10 KB ceiling) — the token budget is a deliberate design constraint. Adding registers doesn't
 change the worst case: each register profile is smaller than the largest author profile,
 and still only one profile loads per request.
 
@@ -220,6 +220,6 @@ git push origin v2
 Copy an existing profile from `references/authors/` (or `references/registers/`), keep the
 same ten-part shape and compression, name where the style sits furthest from neutral, and
 end with the caricature failure to avoid. Then add the name to the Voices list in `SKILL.md`
-**and to the `description` field** — skipping that last step means it never triggers. Keep
+**and to the `description` field** — skipping that last step means it never triggers. Then run `bash scripts/build_index.sh` and commit the regenerated `references/voices.md` — CI fails if it is stale. Keep
 new profiles at or below the size of the largest existing one so the per-request budget
 holds.
