@@ -61,9 +61,23 @@ Registers work the same way — `/superwriter academic`, `/superwriter legal`,
 A short prompt is treated as *generate*; more than a paragraph of supplied text is treated
 as *transform*. If it's ambiguous, say which you want.
 
+### Strength
+
+Add `light`, `medium`, or `strong` after the voice to set how hard the style is pushed.
+`medium` is the default.
+
+```
+/superwriter Hemingway light — a paragraph about a delayed train
+/superwriter Woolf strong — the same paragraph
+```
+
+- **light** — one signature dimension, a touch. Reads as "influenced by."
+- **medium** — the two or three signature dimensions. Default.
+- **strong** — pushed hard, still short of self-parody.
+
 ### `/superwriter list`
 
-Prints the available voices.
+Prints every voice with its defining trait, from the generated `references/voices.md`.
 
 ### `/superwriter analyze`
 
@@ -180,8 +194,13 @@ for a public repo — add your own profiles locally if you want them.
 ## Development
 
 - `bash scripts/validate_skill.sh` — checks the `superwriter/` source: two-key frontmatter,
-  one-line description, `name: superwriter`, 4 reference files, exactly 12 author profiles,
-  exactly 6 register profiles, and every voice listed in `SKILL.md` backed by a profile file.
+  one-line description, `name: superwriter`, the required reference files with no unexpected
+  extras, exactly 12 author profiles, exactly 6 register profiles, every voice listed in
+  `SKILL.md` backed by a profile file, the `## Strength` and `## Before returning` sections,
+  and that `references/voices.md` matches a fresh `build_index.sh` run.
+- `bash scripts/build_index.sh` — regenerates `superwriter/references/voices.md` (the
+  annotated list `/superwriter list` reads). Run it after adding, removing, or renaming a
+  profile; `validate_skill.sh` fails if the committed file is stale.
 - `bash scripts/package_skill.sh` — builds `superwriter.skill` (a ZIP with `superwriter/` at
   the archive root; `.skill` is just a renamed ZIP).
 
