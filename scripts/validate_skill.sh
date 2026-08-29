@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+# Validate the superwriter/ skill source against SUPERWRITER-SPEC.md's checklist.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SKILL_DIR="$ROOT/superwriter"
+fail=0
+
+err() { echo "FAIL: $*" >&2; fail=1; }
+ok()  { echo "ok:   $*"; }
+
+[ -d "$SKILL_DIR" ] || { err "superwriter/ directory missing"; exit 1; }
+[ -f "$SKILL_DIR/SKILL.md" ] || err "superwriter/SKILL.md missing"
+
+# --- Frontmatter checks (name + description, exactly two keys, one-line description) ---
+python3 - "$SKILL_DIR/SKILL.md" <<'PY' || fail=1
+import sys, re
+path = sys.argv[1]
+text = open(path, encoding="utf-8").read()
+m = re.match(r"---\n(.*?)\n---\n", text, re.S)
+if not m:
+    print("FAIL: SKILL.md has no YAML frontmatter delimited by ---", file=sys.stderr)
+    sys.exit(1)
+block = m.group(1)
+lines = block.split("\n")
+keys = [l.split(":", 1)[0].strip() for l in lines if l and not l.startswith((" ", "\t"))]
+if keys != ["name", "description"] and sorted(keys) != ["description", "name"]:
+    print(f"FAIL: frontmatter keys must be exactly name, description (got {keys})", file=sys.stderr)
+    sys.exit(1)
+if len(keys) != 2:
+    print(f"FAIL: frontmatter must have exactly two keys (got {len(keys)}: {keys})", file=sys.stderr)
+    sys.exit(1)
+kv = dict(l.split(":", 1) for l in lines if ":" in l and not l.startswith((" ", "\t")))
+if kv["name"].strip() != "superwriter":
+    print(f"FAIL: name must be 'superwriter' (got {kv['name'].strip()!r})", file=sys.stderr)
+    sys.exit(1)
+# description must be a single line: no continuation lines before closing ---
+desc_idx = next(i for i, l in enumerate(lines) if l.startswith("description:"))
+if any(l.startswith((" ", "\t")) or (l and ":" not in l.split(" ")[0]) for l in lines[desc_idx+1:]):
+    print("FAIL: description must be on one line", file=sys.stderr)
+    sys.exit(1)
+if not kv["description"].strip():
+    print("FAIL: description is empty", file=sys.stderr)
+    sys.exit(1)
+# no blank line before the closing ---
+head = text.split("\n---\n", 1)[0]
+if head.rstrip("\n") != head.rstrip():
+    pass
+if re.search(r"\n\s*\n---\n", text[:m.end()]):
+    print("FAIL: blank line before closing --- of frontmatter", file=sys.stderr)
+    sys.exit(1)
+print("ok:   frontmatter valid (name=superwriter, one-line description, two keys)")
+PY
+
+# --- references/ layout ---
+REF="$SKILL_DIR/references"
+[ -d "$REF" ] || err "superwriter/references/ missing"
+ref_md_count=$(find "$REF" -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
+if [ "$ref_md_count" -eq 4 ]; then
+  ok "references/ has 4 .md files"
+else
+  err "references/ must have exactly 4 .md files (found $ref_md_count)"
+fi
+for f in craft-dimensions transform analysis blending; do
+  [ -f "$REF/$f.md" ] || err "references/$f.md missing"
+done
+
+# --- references/authors/ ---
+AUTH="$REF/authors"
+[ -d "$AUTH" ] || err "superwriter/references/authors/ missing"
+auth_count=$(find "$AUTH" -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
+if [ "$auth_count" -eq 12 ]; then
+  ok "references/authors/ has exactly 12 .md files"
+else
+  err "references/authors/ must have exactly 12 .md files (found $auth_count)"
+fi
+
+# --- every voice in SKILL.md has a matching author file ---
+voices="shakespeare austen hemingway woolf dickens twain poe wilde orwell kafka melville chekhov"
+voice_line=$(awk '/^## Voices/{f=1;next} f && NF{print;exit}' "$SKILL_DIR/SKILL.md")
+for v in $voices; do
+  [ -f "$AUTH/$v.md" ] || err "author profile missing: references/authors/$v.md"
+  echo "$voice_line" | grep -iq "$v" || err "voice '$v' not listed in SKILL.md Voices section"
+done
+ok "all 12 voices listed in SKILL.md and backed by a profile file"
+
+if [ "$fail" -ne 0 ]; then
+  echo "" >&2
+  echo "validation FAILED" >&2
+  exit 1
+fi
+echo ""
+echo "validation PASSED"
