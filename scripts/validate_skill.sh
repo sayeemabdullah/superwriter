@@ -75,14 +75,33 @@ else
   err "references/authors/ must have exactly 12 .md files (found $auth_count)"
 fi
 
-# --- every voice in SKILL.md has a matching author file ---
-voices="shakespeare austen hemingway woolf dickens twain poe wilde orwell kafka melville chekhov"
-voice_line=$(awk '/^## Voices/{f=1;next} f && NF{print;exit}' "$SKILL_DIR/SKILL.md")
-for v in $voices; do
+# --- references/registers/ ---
+REG="$REF/registers"
+[ -d "$REG" ] || err "superwriter/references/registers/ missing"
+reg_count=$(find "$REG" -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
+if [ "$reg_count" -eq 6 ]; then
+  ok "references/registers/ has exactly 6 .md files"
+else
+  err "references/registers/ must have exactly 6 .md files (found $reg_count)"
+fi
+
+# --- every voice in SKILL.md's Voices section has a matching profile file ---
+voices_block=$(awk '/^## Voices/{f=1;next} f && /^## /{exit} f{print}' "$SKILL_DIR/SKILL.md")
+
+authors="shakespeare austen hemingway woolf dickens twain poe wilde orwell kafka melville chekhov"
+for v in $authors; do
   [ -f "$AUTH/$v.md" ] || err "author profile missing: references/authors/$v.md"
-  echo "$voice_line" | grep -iq "$v" || err "voice '$v' not listed in SKILL.md Voices section"
+  echo "$voices_block" | grep -iq "$v" || err "author '$v' not listed in SKILL.md Voices section"
 done
-ok "all 12 voices listed in SKILL.md and backed by a profile file"
+ok "all 12 authors listed in SKILL.md and backed by a profile file"
+
+registers="plain-english academic journalistic corporate legal technical"
+for r in $registers; do
+  [ -f "$REG/$r.md" ] || err "register profile missing: references/registers/$r.md"
+  # match on the first word of the slug (plain-english -> plain)
+  echo "$voices_block" | grep -iq "${r%%-*}" || err "register '$r' not listed in SKILL.md Voices section"
+done
+ok "all 6 registers listed in SKILL.md and backed by a profile file"
 
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
