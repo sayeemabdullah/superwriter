@@ -141,6 +141,13 @@ else
   err "SKILL.md must have a ## Strength section naming light, medium, and strong"
 fi
 
+# --- SKILL.md has the pre-return self-check ---
+if grep -q '^## Before returning' "$SKILL_DIR/SKILL.md"; then
+  ok "SKILL.md has the ## Before returning self-check"
+else
+  err "SKILL.md must have a ## Before returning section"
+fi
+
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
   echo "validation FAILED" >&2

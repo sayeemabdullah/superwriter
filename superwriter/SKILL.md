@@ -71,3 +71,11 @@ Before writing, name the two or three dimensions where this author or register s
 ## Output
 
 Short pieces and analysis inline. Longer generated work, or transforms over ~400 words, to a file. Don't echo the original back on a transform — the user has it.
+
+## Before returning
+
+Read the draft once against the profile:
+
+- Did you lean on the surface tics named in the **caricature failure** line? Cut them.
+- Are the dimensions that should sit ordinary actually ordinary, or did you push all of them? Pull the non-signature dimensions back toward neutral.
+- Transform mode: also run the content check in `references/transform.md` — every claim, fact, name, number, and the argument's order still present.
