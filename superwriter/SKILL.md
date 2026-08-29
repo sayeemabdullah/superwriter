@@ -23,6 +23,7 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 | `references/transform.md` | Transform mode |
 | `references/analysis.md` | `/superwriter analyze` |
 | `references/blending.md` | `/superwriter blend` |
+| `references/voices.md` | `/superwriter list` |
 
 ## Commands
 
@@ -37,6 +38,8 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 No profile for the author or register requested: say so, offer the nearest one, or offer to work from a passage the user supplies as a model. Never improvise a profile from general impressions — that produces caricature.
 
 A blend may pair an author with a register (e.g. Hemingway + journalistic).
+
+On `/superwriter list`, read `references/voices.md` and show each voice with its "furthest from neutral" line.
 
 ## Central rule: style is not tics
 

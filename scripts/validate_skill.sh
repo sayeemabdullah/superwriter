@@ -124,6 +124,13 @@ for r in $registers; do
 done
 ok "all 6 registers listed in SKILL.md and backed by a profile file"
 
+# --- SKILL.md routes /superwriter list to the generated index ---
+if grep -q 'references/voices.md' "$SKILL_DIR/SKILL.md"; then
+  ok "SKILL.md routes /superwriter list to references/voices.md"
+else
+  err "SKILL.md must route /superwriter list to references/voices.md"
+fi
+
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
   echo "validation FAILED" >&2
