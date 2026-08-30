@@ -195,9 +195,10 @@ superwriter/
     └── forms/                    # 6 verse-form profiles
 ```
 
-Only `SKILL.md` + `craft-dimensions.md` + **one** profile load per request (~9.6 KB worst case, against a 10 KB ceiling) — the token budget is a deliberate design constraint. Adding registers doesn't
-change the worst case: each register profile is smaller than the largest author profile,
-and still only one profile loads per request.
+Each request loads `SKILL.md` plus **one** dimensions file plus **one** profile:
+`craft-dimensions.md` + an author or register profile for prose (~9.7 KB worst case), or
+`form-dimensions.md` + a form profile for verse (~9.4 KB worst case). The 10 KB ceiling is a
+deliberate design constraint, enforced by `scripts/validate_skill.sh`.
 
 ## Standing rules
 
