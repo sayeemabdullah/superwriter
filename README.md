@@ -206,7 +206,8 @@ superwriter/
     ├── voices.md                 # Generated index — loads only on /superwriter list
     ├── authors/                  # 12 author profiles
     ├── registers/                # 6 functional-register profiles
-    └── forms/                    # 6 verse-form profiles
+    ├── forms/                    # 6 verse-form profiles
+    └── examples/                 # 24 opt-in exemplars — load only on --example
 ```
 
 Each request loads `SKILL.md` plus **one** dimensions file plus **one** profile:
@@ -247,7 +248,8 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   hardened.
 - **v5** — one opt-in `--example` per voice (24 newly written in-voice passages, each with
   a "shows" note), loaded only on request; a `SKILL.md` compression pass; a validator
-  profile-shape check.
+  profile-shape check; and a YAML-unsafe `: ` in the `SKILL.md` frontmatter `description`
+  fixed (strict loaders had rejected the file).
 
 ## Development
 
@@ -273,8 +275,8 @@ with `superwriter.skill` attached.
 ### Cutting a release
 
 ```
-git tag v4
-git push origin v4
+git tag v5
+git push origin v5
 ```
 
 ### Adding an author, register, or form
@@ -282,6 +284,7 @@ git push origin v4
 Copy an existing profile from `references/authors/` (or `references/registers/`), keep the
 same ten-part shape and compression, name where the style sits furthest from neutral, and
 end with the caricature failure to avoid. Then add the name to the Voices list in `SKILL.md`
-**and to the `description` field** — skipping that last step means it never triggers. Then run `bash scripts/build_index.sh` and commit the regenerated `references/voices.md` — CI fails if it is stale. Keep
-new profiles at or below the size of the largest existing one so the per-request budget
+**and to the `description` field** — skipping that last step means it never triggers. Then run `bash scripts/build_index.sh` and commit the regenerated `references/voices.md` — CI fails if it is stale.
+Also add `references/examples/<slug>.md` — a short original passage plus a `**Shows:**` line; CI fails without it.
+Keep new profiles at or below the size of the largest existing one so the per-request budget
 holds.

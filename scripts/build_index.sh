@@ -11,7 +11,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REF="$ROOT/superwriter/references"
 OUT="${1-}"
 [ -n "$OUT" ] || OUT="$REF/voices.md"
-_tmp_out="$(mktemp)"
+_tmp_out="$(mktemp "$(dirname "$OUT")/.voices.XXXXXX")"
 trap 'rm -f "$_tmp_out"' EXIT
 
 emit_category() {
@@ -42,6 +42,6 @@ emit_category() {
   emit_category custom Custom
 } > "$_tmp_out"
 
+chmod 644 "$_tmp_out"
 mv "$_tmp_out" "$OUT"
-chmod 644 "$OUT"
 echo "wrote $OUT"

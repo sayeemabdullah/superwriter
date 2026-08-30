@@ -18,7 +18,7 @@ Optional strength — `light`, `medium` (default), or `strong` — may follow th
 
 ## Routing
 
-Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. A **verse form** request instead reads `references/form-dimensions.md` plus one `references/forms/<name>.md` (not `craft-dimensions.md`). Two profiles only for a blend; `/superwriter list` reads only `references/voices.md`.
+Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. A **verse form** request instead reads `references/form-dimensions.md` plus one `references/forms/<name>.md` (not `craft-dimensions.md`). Two profiles only for a blend; `/superwriter list` reads only `references/voices.md`. A bare `--example` request is the exception — it reads only the example file (see the table).
 
 | Also read | When |
 |---|---|
@@ -26,7 +26,7 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 | `references/analysis.md` | `/superwriter analyze` |
 | `references/blending.md` | `/superwriter blend` |
 | `references/voices.md` | `/superwriter list` |
-| `references/examples/<name>.md` **only** (no dimensions file, no profile) | `/superwriter <voice> --example` |
+| `references/examples/<name>.md` **only** (no dimensions file, no profile) | `/superwriter <voice> --example`, or the user asks to see an example |
 
 ## Commands
 

@@ -6,14 +6,14 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILL_DIR="$ROOT/superwriter"
 fail=0
 
-err() { echo "FAIL: $*" >&2; fail=1; }
+err() { echo "FAIL: $*" >&2; fail=$((fail + 1)); }
 ok()  { echo "ok:   $*"; }
 
 [ -d "$SKILL_DIR" ] || { err "superwriter/ directory missing"; exit 1; }
 [ -f "$SKILL_DIR/SKILL.md" ] || err "superwriter/SKILL.md missing"
 
 # --- Frontmatter checks (name + description, exactly two keys, one-line description) ---
-python3 - "$SKILL_DIR/SKILL.md" <<'PY' || fail=1
+python3 - "$SKILL_DIR/SKILL.md" <<'PY' || fail=$((fail + 1))
 import sys, re
 path = sys.argv[1]
 text = open(path, encoding="utf-8").read()
@@ -158,8 +158,8 @@ done
 [ "$fail" -eq "$_desc_fail" ] && ok "all voices named in the frontmatter description"
 
 # --- description must be YAML-safe (no ": " which breaks plain-scalar parsing) ---
-if printf '%s' "$_desc" | grep -q ': '; then
-  err "SKILL.md description contains ': ' — breaks YAML frontmatter parsing (use ' — ')"
+if printf '%s' "$_desc" | grep -Eq ': |[[:space:]]#|:$'; then
+  err "SKILL.md description has a YAML plain-scalar hazard (': ', ' #', or a trailing ':') — use plain prose / ' — '"
 else
   ok "SKILL.md description is YAML-safe"
 fi
@@ -251,6 +251,7 @@ if [ -d "$EXAMPLES" ]; then
     if [ ! -f "$REF/authors/$b" ] && [ ! -f "$REF/registers/$b" ] && [ ! -f "$REF/forms/$b" ]; then
       err "orphan example references/examples/$b has no matching profile"
     fi
+    head -1 "$e" | grep -q '^# ' || err "references/examples/$b: line 1 is not a '# Title' heading"
     grep -q '^\*\*Shows:\*\* .' "$e" || err "references/examples/$b has no '**Shows:** …' line"
     # a passage: at least one non-empty line that is not the heading and not the Shows line
     awk 'NR>1 && !/^#/ && !/^\*\*Shows:\*\*/ && NF {found=1} END{exit !found}' "$e" \
@@ -269,7 +270,7 @@ for d in authors registers forms; do
     head -1 "$p" | grep -q '^# ' || err "references/$d/$b: line 1 is not a '# Title' heading"
     grep -q '^\*\*Furthest from neutral:\*\* .' "$p" || err "references/$d/$b: no '**Furthest from neutral:** …' line"
     grep -q '^\*\*Writing it:\*\* .' "$p" || err "references/$d/$b: no '**Writing it:** …' line"
-    _bullets=$(grep -c '^- \*\*' "$p")
+    _bullets=$(grep -c '^- \*\*' "$p" || true)
     [ "$_bullets" -ge 8 ] || err "references/$d/$b: only $_bullets '- **…**' dimension bullets (expected >= 8)"
   done
 done
