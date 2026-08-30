@@ -1,5 +1,5 @@
 # Twain — example
 
-Old Bewley said doctors never cured anybody that wouldn't have got well anyhow, and he ought to know, on account of he'd been sick most of his life and had outlasted three of them. I said maybe that was because he never paid, so they quit coming. He said that was a mean way to look at it, and anyway it proved his point, and I could see he reckoned he'd got the better of me, so I let him have it.
+The preacher said the drought was a judgment on the town for its wickedness, and everyone in the pew agreed, and said amen, and looked around to see who he meant. I couldn't work out which of them had done the wickedness, and it seemed impolite to ask, so I nodded along with the rest. Two days on it rained hard and nobody mentioned the wickedness again, which I thought was decent of them.
 
-**Shows:** spoken rhythm strung together with "and" and "on account of"; a narrator who lets the other man win; the joke delivered flat.
+**Shows:** spoken rhythm strung together with "and"; a narrator who takes the sermon literally and misses what the grown-ups are performing — the gap does the satire; the joke delivered flat.
