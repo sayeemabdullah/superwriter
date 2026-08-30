@@ -126,6 +126,23 @@ for r in $registers; do
 done
 ok "all 6 registers listed in SKILL.md and backed by a profile file"
 
+# --- references/forms/ ---
+FORMS="$REF/forms"
+[ -d "$FORMS" ] || err "superwriter/references/forms/ missing"
+forms_count=$(find "$FORMS" -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
+if [ "$forms_count" -eq 6 ]; then
+  ok "references/forms/ has exactly 6 .md files"
+else
+  err "references/forms/ must have exactly 6 .md files (found $forms_count)"
+fi
+
+forms="sonnet blank-verse heroic-couplet ballad free-verse haiku"
+for v in $forms; do
+  [ -f "$FORMS/$v.md" ] || err "form profile missing: references/forms/$v.md"
+  echo "$voices_block" | grep -iq "${v%%-*}" || err "form '$v' not listed in SKILL.md Voices section"
+done
+ok "all 6 forms listed in SKILL.md and backed by a profile file"
+
 # --- SKILL.md routes /superwriter list to the generated index ---
 if grep -q 'references/voices.md' "$SKILL_DIR/SKILL.md"; then
   ok "SKILL.md routes /superwriter list to references/voices.md"

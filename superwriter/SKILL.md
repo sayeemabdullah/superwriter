@@ -47,6 +47,10 @@ Non-signature dimensions stay near neutral at every strength.
 
 **Registers:** Plain English · Academic · Journalistic · Corporate · Legal · Technical
 
+**Forms:** Sonnet · Blank verse · Heroic couplet · Ballad · Free verse · Haiku
+
+Transform into a verse form: line and stanza counts change, meaning does not; flag when the form cannot hold the content without cutting.
+
 No profile for the author or register requested: say so, offer the nearest one, or offer to work from a passage the user supplies as a model. Never improvise a profile from general impressions — that produces caricature.
 
 A blend may pair an author with a register (e.g. Hemingway + journalistic).
