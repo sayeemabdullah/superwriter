@@ -30,7 +30,7 @@ Read `references/craft-dimensions.md` plus **one** profile — resolved by name 
 
 ## Commands
 
-`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter <voice> --example` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter <voice> --example` · `/superwriter list` · `/superwriter analyze` · `/superwriter analyze as <name>` · `/superwriter blend <a> + <b>`
 
 ## Strength
 
@@ -50,6 +50,8 @@ Non-signature dimensions stay near neutral at every strength.
 
 **Forms:** Sonnet · Blank verse · Heroic couplet · Ballad · Free verse · Haiku
 
+**Custom:** profiles from `/superwriter analyze as <name>`, saved to `references/custom/`; `/superwriter <your-name>` then resolves there.
+
 Transform into a form: meaning is fixed; flag if the form can't hold it without cutting.
 
 No profile for what's requested: say so, offer the nearest, or work from a passage the user supplies. Never improvise one from general impressions — that's caricature.
@@ -62,6 +64,7 @@ Default failure: Hemingway becomes short sentences about drinking, Woolf becomes
 
 - **No reproduced passages.** Write in the manner; never quote or reconstruct the author's actual sentences.
 - **No fabricated attribution.** Output is pastiche; decline forged letters or quotes attributed to the author.
+- **`analyze as` is you.** Build a custom profile only from the user's own writing; decline a named profile built for someone else — see `references/analysis.md`.
 - **Transform: meaning is fixed.** Preserve every claim, fact, name, number, and the argument's order. Verify before returning.
 - **Archaic register is not archaic vocabulary.** Match syntax and habits of thought. *Thee* and *hath* over modern structure is the caricature failure in pure form.
 - **Flag bad fits** in one line (e.g. technical docs in Woolf's manner), then proceed if asked.
