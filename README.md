@@ -105,6 +105,21 @@ and what it costs. Paste the writing you want analysed.
 /superwriter analyze
 ```
 
+### `/superwriter analyze as <name>`
+
+Same analysis as `analyze`, but the output is a **profile** in the skill's own format,
+plus the steps to install it. Save it to `references/custom/`, regenerate the index, and
+`/superwriter <name>` writes in your voice from then on.
+
+```
+[paste 3–4 paragraphs of your own writing]
+
+/superwriter analyze as me
+```
+
+It only works on your own writing — the skill declines to build a named profile for a
+third party from a pasted sample.
+
 ### `/superwriter blend <a> + <b>`
 
 Combines two voices by assigning dimensions to each source rather than averaging them
@@ -207,7 +222,8 @@ superwriter/
     ├── authors/                  # 12 author profiles
     ├── registers/                # 6 functional-register profiles
     ├── forms/                    # 6 verse-form profiles
-    └── examples/                 # 24 opt-in exemplars — load only on --example
+    ├── examples/                 # 24 opt-in exemplars — load only on --example
+    └── custom/                   # your own profiles (ships empty) — analyze as <name>
 ```
 
 Each request loads `SKILL.md` plus **one** dimensions file plus **one** profile:
@@ -250,6 +266,9 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   a "shows" note), loaded only on request; a `SKILL.md` compression pass; a validator
   profile-shape check; and a YAML-unsafe `: ` in the `SKILL.md` frontmatter `description`
   fixed (strict loaders had rejected the file).
+- **v6** — `/superwriter analyze as <name>` emits a reusable profile in the skill's format;
+  a `references/custom/` slot (ships empty) holds your own profiles, resolved by name after
+  the built-in roster. Completes the v3–v6 roadmap.
 
 ## Development
 
@@ -259,9 +278,10 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   backed by a profile file, the `## Strength` and `## Before returning` sections, that
   `references/voices.md` matches a fresh `build_index.sh` run, that the per-request
   token load (normal path and form path) stays within 10240 bytes, that
-  `references/examples/` is 1:1 with the profiles, and that every profile has the
+  `references/examples/` is 1:1 with the profiles, that every profile has the
   load-bearing shape (title, furthest-from-neutral line, ≥ 8 dimension bullets, writing-it
-  line).
+  line), and that `references/custom/` exists with its README, and any custom profile has
+  the load-bearing shape.
 - `bash scripts/build_index.sh` — regenerates `superwriter/references/voices.md` (the
   annotated list `/superwriter list` reads). Run it after adding, removing, or renaming a
   profile; `validate_skill.sh` fails if the committed file is stale.
