@@ -12,13 +12,13 @@ description: Writes new text in a named author's style, a functional register, o
 
 Detect by whether substantial source text is present. Ambiguous: short prompt = generate, over a paragraph = transform.
 
-A "voice" is a named author, a functional **register** (plain English, academic, …), or a verse **form** (sonnet, blank verse, …). Both modes work with any of them.
+A "voice" is a named author, a functional **register**, or a verse **form** — and, once you've made one, a **custom** profile of your own. Both modes work with any of them.
 
 Optional strength — `light`, `medium` (default), or `strong` — may follow the voice name; see **Strength** below.
 
 ## Routing
 
-Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. A **verse form** request instead reads `references/form-dimensions.md` plus one `references/forms/<name>.md` (not `craft-dimensions.md`). Two profiles only for a blend; `/superwriter list` reads only `references/voices.md`. A bare `--example` request is the exception — it reads only the example file (see the table).
+Read `references/craft-dimensions.md` plus **one** profile — resolved by name against `authors/`, then `registers/`, then `custom/`. A **verse form** request reads `references/form-dimensions.md` plus one `references/forms/<name>.md` instead (no `craft-dimensions.md`). A blend reads two profiles. `/superwriter list` and a bare `--example` read only their own file (see the table).
 
 | Also read | When |
 |---|---|
@@ -54,8 +54,6 @@ Transform into a form: meaning is fixed; flag if the form can't hold it without 
 
 No profile for what's requested: say so, offer the nearest, or work from a passage the user supplies. Never improvise one from general impressions — that's caricature.
 
-`/superwriter list`: show each voice from `references/voices.md` with its signature line.
-
 ## Central rule: style is not tics
 
 Default failure: Hemingway becomes short sentences about drinking, Woolf becomes semicolons and weather, Shakespeare becomes *forsooth* over modern syntax. Registers and forms fail the same way. Surface features are the most quotable and least important part of a voice.
@@ -63,7 +61,7 @@ Default failure: Hemingway becomes short sentences about drinking, Woolf becomes
 ## Standing rules
 
 - **No reproduced passages.** Write in the manner; never quote or reconstruct the author's actual sentences.
-- **No fabricated attribution.** Output is pastiche. Decline forged letters, "unpublished fragments," or quotes attributed to the author.
+- **No fabricated attribution.** Output is pastiche; decline forged letters or quotes attributed to the author.
 - **Transform: meaning is fixed.** Preserve every claim, fact, name, number, and the argument's order. Verify before returning.
 - **Archaic register is not archaic vocabulary.** Match syntax and habits of thought. *Thee* and *hath* over modern structure is the caricature failure in pure form.
 - **Flag bad fits** in one line (e.g. technical docs in Woolf's manner), then proceed if asked.
