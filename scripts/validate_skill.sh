@@ -213,12 +213,12 @@ normal = skill + craft + max(largest("authors"), largest("registers"))
 form = skill + formd + largest("forms") if formd else 0
 
 ok = True
-print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + largest prose profile)")
+print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + largest prose profile)", flush=True)
 if normal > CEIL:
     print(f"FAIL: normal-path per-request load {normal} B exceeds {CEIL} B", file=sys.stderr)
     ok = False
 if form:
-    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + largest form profile)")
+    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + largest form profile)", flush=True)
     if form > CEIL:
         print(f"FAIL: form-path per-request load {form} B exceeds {CEIL} B", file=sys.stderr)
         ok = False
@@ -258,6 +258,22 @@ if [ -d "$EXAMPLES" ]; then
   done
 fi
 [ "$fail" -eq "$_fail_before_examples" ] && ok "references/examples/ is 1:1 with the profiles and well-formed"
+
+# --- every author/register/form profile has the load-bearing shape ---
+_fail_before_shape=$fail
+for d in authors registers forms; do
+  for p in "$REF/$d"/*.md; do
+    [ -e "$p" ] || continue
+    b=$(basename "$p")
+    [ "$b" = "README.md" ] && continue
+    head -1 "$p" | grep -q '^# ' || err "references/$d/$b: line 1 is not a '# Title' heading"
+    grep -q '^\*\*Furthest from neutral:\*\* .' "$p" || err "references/$d/$b: no '**Furthest from neutral:** …' line"
+    grep -q '^\*\*Writing it:\*\* .' "$p" || err "references/$d/$b: no '**Writing it:** …' line"
+    _bullets=$(grep -c '^- \*\*' "$p")
+    [ "$_bullets" -ge 8 ] || err "references/$d/$b: only $_bullets '- **…**' dimension bullets (expected >= 8)"
+  done
+done
+[ "$fail" -eq "$_fail_before_shape" ] && ok "all profiles have the load-bearing shape (title, furthest-from-neutral, >=8 bullets, writing-it)"
 
 if [ "$fail" -ne 0 ]; then
   echo "" >&2

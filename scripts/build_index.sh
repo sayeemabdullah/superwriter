@@ -43,4 +43,5 @@ emit_category() {
 } > "$_tmp_out"
 
 mv "$_tmp_out" "$OUT"
+chmod 644 "$OUT"
 echo "wrote $OUT"
