@@ -148,6 +148,47 @@ else
   err "SKILL.md must have a ## Before returning section"
 fi
 
+# --- per-request token budget (ceiling 10240 B) ---
+if python3 - "$SKILL_DIR" <<'PY'
+import os, sys
+root = sys.argv[1]
+CEIL = 10240
+
+def size(p):
+    return os.path.getsize(p) if os.path.exists(p) else 0
+
+def largest(d):
+    d = os.path.join(root, "references", d)
+    if not os.path.isdir(d):
+        return 0
+    return max([size(os.path.join(d, f)) for f in os.listdir(d)
+               if f.endswith(".md") and f != "README.md"] or [0])
+
+skill = size(os.path.join(root, "SKILL.md"))
+craft = size(os.path.join(root, "references", "craft-dimensions.md"))
+formd = size(os.path.join(root, "references", "form-dimensions.md"))
+
+normal = skill + craft + max(largest("authors"), largest("registers"))
+form = skill + formd + largest("forms") if formd else 0
+
+ok = True
+print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + largest prose profile)")
+if normal > CEIL:
+    print(f"FAIL: normal-path per-request load {normal} B exceeds {CEIL} B", file=sys.stderr)
+    ok = False
+if form:
+    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + largest form profile)")
+    if form > CEIL:
+        print(f"FAIL: form-path per-request load {form} B exceeds {CEIL} B", file=sys.stderr)
+        ok = False
+sys.exit(0 if ok else 1)
+PY
+then
+  ok "per-request token budget within 10240 B"
+else
+  err "per-request token budget exceeded"
+fi
+
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
   echo "validation FAILED" >&2
