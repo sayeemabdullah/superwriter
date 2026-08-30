@@ -1,7 +1,7 @@
 # superwriter
 
-A Claude skill that writes in a named author's manner — or in a functional writing
-register — either generating new text in that style, or rewriting text you supply while
+A Claude skill that writes in a named author's manner, a functional writing register, or a
+verse form — either generating new text in that style, or rewriting text you supply while
 keeping its meaning intact.
 
 Twelve public-domain author voices and six registers (plain English, academic, journalistic,
@@ -75,6 +75,19 @@ Add `light`, `medium`, or `strong` after the voice to set how hard the style is 
 - **light** — one signature dimension, a touch. Reads as "influenced by."
 - **medium** — the two or three signature dimensions. Default.
 - **strong** — pushed hard, still short of self-parody.
+
+### `/superwriter <voice> --example`
+
+Show a short, newly written passage in a voice — with a note on which craft dimensions it
+demonstrates — before you commit to a full piece. Works for any author, register, or form.
+
+```
+/superwriter Woolf --example
+/superwriter heroic couplet --example
+```
+
+The examples live in `references/examples/` and load only when asked, so they cost nothing
+on a normal request.
 
 ### `/superwriter list`
 
@@ -232,6 +245,9 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   with a companion `references/form-dimensions.md` loaded only for form requests; the
   per-request budget is now enforced in CI; `build_index.sh` and `validate_skill.sh`
   hardened.
+- **v5** — one opt-in `--example` per voice (24 newly written in-voice passages, each with
+  a "shows" note), loaded only on request; a `SKILL.md` compression pass; a validator
+  profile-shape check.
 
 ## Development
 
@@ -239,8 +255,11 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   one-line description, `name: superwriter`, the required reference files with no unexpected
   extras, exactly 12 author / 6 register / 6 form profiles, every voice listed in `SKILL.md`
   backed by a profile file, the `## Strength` and `## Before returning` sections, that
-  `references/voices.md` matches a fresh `build_index.sh` run, and that the per-request
-  token load (normal path and form path) stays within 10240 bytes.
+  `references/voices.md` matches a fresh `build_index.sh` run, that the per-request
+  token load (normal path and form path) stays within 10240 bytes, that
+  `references/examples/` is 1:1 with the profiles, and that every profile has the
+  load-bearing shape (title, furthest-from-neutral line, ≥ 8 dimension bullets, writing-it
+  line).
 - `bash scripts/build_index.sh` — regenerates `superwriter/references/voices.md` (the
   annotated list `/superwriter list` reads). Run it after adding, removing, or renaming a
   profile; `validate_skill.sh` fails if the committed file is stale.
