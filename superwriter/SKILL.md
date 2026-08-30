@@ -1,6 +1,6 @@
 ---
 name: superwriter
-description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices: Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers: plain English, academic, journalistic, corporate, legal, technical documentation. Verse forms: sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style and blends two influences. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, or invokes /superwriter — e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "what's my writing style?"
+description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices — Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers — plain English, academic, journalistic, corporate, legal, technical documentation. Verse forms — sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style and blends two influences. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, or invokes /superwriter — e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "what's my writing style?"
 ---
 
 # Superwriter
@@ -18,7 +18,7 @@ Optional strength — `light`, `medium` (default), or `strong` — may follow th
 
 ## Routing
 
-Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. A **verse form** request instead reads `references/form-dimensions.md` plus one `references/forms/<name>.md` (not `craft-dimensions.md`). Two profiles only for a blend; `/superwriter list` reads only `references/voices.md`.
+Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. A **verse form** request instead reads `references/form-dimensions.md` plus one `references/forms/<name>.md` (not `craft-dimensions.md`). Two profiles only for a blend; `/superwriter list` reads only `references/voices.md`. A bare `--example` request is the exception — it reads only the example file (see the table).
 
 | Also read | When |
 |---|---|
@@ -26,10 +26,11 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 | `references/analysis.md` | `/superwriter analyze` |
 | `references/blending.md` | `/superwriter blend` |
 | `references/voices.md` | `/superwriter list` |
+| `references/examples/<name>.md` **only** (no dimensions file, no profile) | `/superwriter <voice> --example`, or the user asks to see an example |
 
 ## Commands
 
-`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter <voice> --example` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
 
 ## Strength
 
@@ -49,17 +50,15 @@ Non-signature dimensions stay near neutral at every strength.
 
 **Forms:** Sonnet · Blank verse · Heroic couplet · Ballad · Free verse · Haiku
 
-Transform into a verse form: line and stanza counts change, meaning does not; flag when the form cannot hold the content without cutting.
+Transform into a form: meaning is fixed; flag if the form can't hold it without cutting.
 
-No profile for the author or register requested: say so, offer the nearest one, or offer to work from a passage the user supplies as a model. Never improvise a profile from general impressions — that produces caricature.
+No profile for what's requested: say so, offer the nearest, or work from a passage the user supplies. Never improvise one from general impressions — that's caricature.
 
-A blend may pair an author with a register (e.g. Hemingway + journalistic).
-
-On `/superwriter list`, read `references/voices.md` and show each voice with its "furthest from neutral" line.
+`/superwriter list`: show each voice from `references/voices.md` with its signature line.
 
 ## Central rule: style is not tics
 
-Default failure: Hemingway becomes short sentences about drinking, Woolf becomes semicolons and weather, Shakespeare becomes *forsooth* over modern syntax. Registers fail the same way: academic becomes passive jargon, legal becomes fake-archaic, corporate becomes buzzword soup. Surface features are the most quotable and least important part of a voice.
+Default failure: Hemingway becomes short sentences about drinking, Woolf becomes semicolons and weather, Shakespeare becomes *forsooth* over modern syntax. Registers and forms fail the same way. Surface features are the most quotable and least important part of a voice.
 
 ## Standing rules
 
@@ -67,7 +66,7 @@ Default failure: Hemingway becomes short sentences about drinking, Woolf becomes
 - **No fabricated attribution.** Output is pastiche. Decline forged letters, "unpublished fragments," or quotes attributed to the author.
 - **Transform: meaning is fixed.** Preserve every claim, fact, name, number, and the argument's order. Verify before returning.
 - **Archaic register is not archaic vocabulary.** Match syntax and habits of thought. *Thee* and *hath* over modern structure is the caricature failure in pure form.
-- **Flag bad fits** in one line (technical documentation in Woolf's manner will be unusable), then proceed if asked.
+- **Flag bad fits** in one line (e.g. technical docs in Woolf's manner), then proceed if asked.
 - **Never invent** detail the source lacked to satisfy a style's rhythm. Leave the gap.
 
 ## Output
@@ -80,4 +79,4 @@ Read the draft once against the profile:
 
 - Did you lean on the surface tics named in the **caricature failure** line? Cut them.
 - Are the dimensions that should sit ordinary actually ordinary, or did you push all of them? Pull the non-signature dimensions back toward neutral.
-- Transform mode: also run the content check in `references/transform.md` — every claim, fact, name, number, and the argument's order still present.
+- Transform mode: run the content check in `references/transform.md`.

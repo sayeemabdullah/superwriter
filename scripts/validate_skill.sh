@@ -6,14 +6,14 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILL_DIR="$ROOT/superwriter"
 fail=0
 
-err() { echo "FAIL: $*" >&2; fail=1; }
+err() { echo "FAIL: $*" >&2; fail=$((fail + 1)); }
 ok()  { echo "ok:   $*"; }
 
 [ -d "$SKILL_DIR" ] || { err "superwriter/ directory missing"; exit 1; }
 [ -f "$SKILL_DIR/SKILL.md" ] || err "superwriter/SKILL.md missing"
 
 # --- Frontmatter checks (name + description, exactly two keys, one-line description) ---
-python3 - "$SKILL_DIR/SKILL.md" <<'PY' || fail=1
+python3 - "$SKILL_DIR/SKILL.md" <<'PY' || fail=$((fail + 1))
 import sys, re
 path = sys.argv[1]
 text = open(path, encoding="utf-8").read()
@@ -157,6 +157,13 @@ for v in $authors $registers $forms; do
 done
 [ "$fail" -eq "$_desc_fail" ] && ok "all voices named in the frontmatter description"
 
+# --- description must be YAML-safe (no ": " which breaks plain-scalar parsing) ---
+if printf '%s' "$_desc" | grep -Eq ': |[[:space:]]#|:$'; then
+  err "SKILL.md description has a YAML plain-scalar hazard (': ', ' #', or a trailing ':') — use plain prose / ' — '"
+else
+  ok "SKILL.md description is YAML-safe"
+fi
+
 # --- SKILL.md routes /superwriter list to the generated index ---
 if grep -q 'references/voices.md' "$SKILL_DIR/SKILL.md"; then
   ok "SKILL.md routes /superwriter list to references/voices.md"
@@ -206,12 +213,12 @@ normal = skill + craft + max(largest("authors"), largest("registers"))
 form = skill + formd + largest("forms") if formd else 0
 
 ok = True
-print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + largest prose profile)")
+print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + largest prose profile)", flush=True)
 if normal > CEIL:
     print(f"FAIL: normal-path per-request load {normal} B exceeds {CEIL} B", file=sys.stderr)
     ok = False
 if form:
-    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + largest form profile)")
+    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + largest form profile)", flush=True)
     if form > CEIL:
         print(f"FAIL: form-path per-request load {form} B exceeds {CEIL} B", file=sys.stderr)
         ok = False
@@ -222,6 +229,52 @@ then
 else
   err "per-request token budget exceeded"
 fi
+
+# --- references/examples/ is 1:1 with the profiles, and each is well-formed ---
+EXAMPLES="$REF/examples"
+_fail_before_examples=$fail
+[ -d "$EXAMPLES" ] || err "superwriter/references/examples/ missing"
+if [ -d "$EXAMPLES" ]; then
+  # every profile has an example
+  for d in authors registers forms; do
+    for p in "$REF/$d"/*.md; do
+      [ -e "$p" ] || continue
+      b=$(basename "$p")
+      [ "$b" = "README.md" ] && continue
+      [ -f "$EXAMPLES/$b" ] || err "no example for references/$d/$b (expected references/examples/$b)"
+    done
+  done
+  # no orphan examples, and each is well-formed
+  for e in "$EXAMPLES"/*.md; do
+    [ -e "$e" ] || continue
+    b=$(basename "$e")
+    if [ ! -f "$REF/authors/$b" ] && [ ! -f "$REF/registers/$b" ] && [ ! -f "$REF/forms/$b" ]; then
+      err "orphan example references/examples/$b has no matching profile"
+    fi
+    head -1 "$e" | grep -q '^# ' || err "references/examples/$b: line 1 is not a '# Title' heading"
+    grep -q '^\*\*Shows:\*\* .' "$e" || err "references/examples/$b has no '**Shows:** …' line"
+    # a passage: at least one non-empty line that is not the heading and not the Shows line
+    awk 'NR>1 && !/^#/ && !/^\*\*Shows:\*\*/ && NF {found=1} END{exit !found}' "$e" \
+      || err "references/examples/$b has no example passage"
+  done
+fi
+[ "$fail" -eq "$_fail_before_examples" ] && ok "references/examples/ is 1:1 with the profiles and well-formed"
+
+# --- every author/register/form profile has the load-bearing shape ---
+_fail_before_shape=$fail
+for d in authors registers forms; do
+  for p in "$REF/$d"/*.md; do
+    [ -e "$p" ] || continue
+    b=$(basename "$p")
+    [ "$b" = "README.md" ] && continue
+    head -1 "$p" | grep -q '^# ' || err "references/$d/$b: line 1 is not a '# Title' heading"
+    grep -q '^\*\*Furthest from neutral:\*\* .' "$p" || err "references/$d/$b: no '**Furthest from neutral:** …' line"
+    grep -q '^\*\*Writing it:\*\* .' "$p" || err "references/$d/$b: no '**Writing it:** …' line"
+    _bullets=$(grep -c '^- \*\*' "$p" || true)
+    [ "$_bullets" -ge 8 ] || err "references/$d/$b: only $_bullets '- **…**' dimension bullets (expected >= 8)"
+  done
+done
+[ "$fail" -eq "$_fail_before_shape" ] && ok "all profiles have the load-bearing shape (title, furthest-from-neutral, >=8 bullets, writing-it)"
 
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
