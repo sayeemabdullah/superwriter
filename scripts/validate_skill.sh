@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Validate the superwriter/ skill source against SUPERWRITER-SPEC.md's checklist.
+# Validate the superwriter/ skill source against the design spec's checklist.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -59,6 +59,7 @@ REF="$SKILL_DIR/references"
 # Required top-level reference files. Generated files allowed alongside them: voices.md.
 required_ref="craft-dimensions transform analysis blending"
 generated_ref="voices"
+_fail_before_reflayout=$fail
 for f in $required_ref; do
   [ -f "$REF/$f.md" ] || err "references/$f.md missing"
 done
@@ -70,11 +71,12 @@ while IFS= read -r f; do
     *) err "unexpected top-level file: references/$_b.md" ;;
   esac
 done < <(find "$REF" -maxdepth 1 -type f -name '*.md')
-ok "references/ top-level files: all required present, no unexpected extras"
+[ "$fail" -eq "$_fail_before_reflayout" ] && ok "references/ top-level files: all required present, no unexpected extras"
 
 # --- references/voices.md matches scripts/build_index.sh output ---
 if [ -f "$ROOT/scripts/build_index.sh" ]; then
   _tmp_idx="$(mktemp)"
+  trap 'rm -f "$_tmp_idx"' EXIT
   bash "$ROOT/scripts/build_index.sh" "$_tmp_idx" >/dev/null
   if diff -u "$REF/voices.md" "$_tmp_idx" >/dev/null 2>&1; then
     ok "references/voices.md is up to date"
@@ -131,14 +133,15 @@ else
   err "SKILL.md must route /superwriter list to references/voices.md"
 fi
 
-# --- SKILL.md documents the strength dial ---
-if grep -q '^## Strength' "$SKILL_DIR/SKILL.md" \
-   && grep -Eq '\blight\b'  "$SKILL_DIR/SKILL.md" \
-   && grep -Eq '\bmedium\b' "$SKILL_DIR/SKILL.md" \
-   && grep -Eq '\bstrong\b' "$SKILL_DIR/SKILL.md"; then
+# --- SKILL.md documents the strength dial (checked within the ## Strength section) ---
+_strength_body=$(awk '/^## Strength/{f=1;next} f && /^## /{exit} f{print}' "$SKILL_DIR/SKILL.md")
+if [ -n "$_strength_body" ] \
+   && printf '%s' "$_strength_body" | grep -Eq '\blight\b' \
+   && printf '%s' "$_strength_body" | grep -Eq '\bmedium\b' \
+   && printf '%s' "$_strength_body" | grep -Eq '\bstrong\b'; then
   ok "SKILL.md documents the strength dial (light/medium/strong)"
 else
-  err "SKILL.md must have a ## Strength section naming light, medium, and strong"
+  err "SKILL.md ## Strength section must name light, medium, and strong in its body"
 fi
 
 # --- SKILL.md has the pre-return self-check ---

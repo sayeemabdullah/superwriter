@@ -18,7 +18,7 @@ Optional strength — `light`, `medium` (default), or `strong` — may follow th
 
 ## Routing
 
-Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. Two profiles only for a blend.
+Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. A **verse form** request instead reads `references/form-dimensions.md` plus one `references/forms/<name>.md` (not `craft-dimensions.md`). Two profiles only for a blend; `/superwriter list` reads only `references/voices.md`.
 
 | Also read | When |
 |---|---|
@@ -56,8 +56,6 @@ On `/superwriter list`, read `references/voices.md` and show each voice with its
 ## Central rule: style is not tics
 
 Default failure: Hemingway becomes short sentences about drinking, Woolf becomes semicolons and weather, Shakespeare becomes *forsooth* over modern syntax. Registers fail the same way: academic becomes passive jargon, legal becomes fake-archaic, corporate becomes buzzword soup. Surface features are the most quotable and least important part of a voice.
-
-Before writing, name the two or three dimensions where this author or register sits furthest from neutral. Write to those; leave the rest near ordinary. Pushing every dimension to its extreme produces parody — real writing is unusual in a few ways and unremarkable in the rest.
 
 ## Standing rules
 

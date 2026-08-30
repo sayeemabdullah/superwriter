@@ -9,7 +9,8 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REF="$ROOT/superwriter/references"
-OUT="${1:-$REF/voices.md}"
+OUT="${1-}"
+[ -n "$OUT" ] || OUT="$REF/voices.md"
 
 emit_category() {
   local dir="$1" heading="$2" f title fn started=0
@@ -22,8 +23,12 @@ emit_category() {
     fi
     title=$(grep -m1 '^# ' "$f" | sed 's/^# //' || true)
     fn=$(grep -m1 '^\*\*Furthest from neutral:\*\* ' "$f" | sed 's/^\*\*Furthest from neutral:\*\* //' || true)
+    if [ -z "$title" ] || [ -z "$fn" ]; then
+      echo "build_index: $f is missing a '# Title' or '**Furthest from neutral:**' line" >&2
+      exit 1
+    fi
     printf '| %s | %s |\n' "$title" "$fn"
-  done < <(find "$REF/$dir" -maxdepth 1 -type f -name '*.md' | sort)
+  done < <(find "$REF/$dir" -maxdepth 1 -type f -name '*.md' | LC_ALL=C sort)
 }
 
 {
