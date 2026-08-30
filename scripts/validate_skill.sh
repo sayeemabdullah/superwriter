@@ -108,6 +108,12 @@ else
   err "references/registers/ must have exactly 6 .md files (found $reg_count)"
 fi
 
+# --- references/custom/ (user profile slot; ships with only README.md) ---
+CUSTOM="$REF/custom"
+[ -d "$CUSTOM" ] || err "superwriter/references/custom/ missing"
+[ -f "$CUSTOM/README.md" ] || err "references/custom/README.md missing"
+[ -d "$CUSTOM" ] && [ -f "$CUSTOM/README.md" ] && ok "references/custom/ present with README.md"
+
 # --- every voice in SKILL.md's Voices section has a matching profile file ---
 voices_block=$(awk '/^## Voices/{f=1;next} f && /^## /{exit} f{print}' "$SKILL_DIR/SKILL.md")
 
@@ -262,7 +268,7 @@ fi
 
 # --- every author/register/form profile has the load-bearing shape ---
 _fail_before_shape=$fail
-for d in authors registers forms; do
+for d in authors registers forms custom; do
   for p in "$REF/$d"/*.md; do
     [ -e "$p" ] || continue
     b=$(basename "$p")
