@@ -57,7 +57,7 @@ REF="$SKILL_DIR/references"
 [ -d "$REF" ] || err "superwriter/references/ missing"
 
 # Required top-level reference files. Generated files allowed alongside them: voices.md.
-required_ref="craft-dimensions transform analysis blending"
+required_ref="craft-dimensions transform analysis blending form-dimensions"
 generated_ref="voices"
 _fail_before_reflayout=$fail
 for f in $required_ref; do
