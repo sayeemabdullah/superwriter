@@ -157,6 +157,13 @@ for v in $authors $registers $forms; do
 done
 [ "$fail" -eq "$_desc_fail" ] && ok "all voices named in the frontmatter description"
 
+# --- description must be YAML-safe (no ": " which breaks plain-scalar parsing) ---
+if printf '%s' "$_desc" | grep -q ': '; then
+  err "SKILL.md description contains ': ' — breaks YAML frontmatter parsing (use ' — ')"
+else
+  ok "SKILL.md description is YAML-safe"
+fi
+
 # --- SKILL.md routes /superwriter list to the generated index ---
 if grep -q 'references/voices.md' "$SKILL_DIR/SKILL.md"; then
   ok "SKILL.md routes /superwriter list to references/voices.md"
