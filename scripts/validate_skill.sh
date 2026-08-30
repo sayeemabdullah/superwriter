@@ -52,18 +52,39 @@ if re.search(r"\n\s*\n---\n", text[:m.end()]):
 print("ok:   frontmatter valid (name=superwriter, one-line description, two keys)")
 PY
 
-# --- references/ layout ---
+# --- references/ layout: required files present, no unexpected top-level .md ---
 REF="$SKILL_DIR/references"
 [ -d "$REF" ] || err "superwriter/references/ missing"
-ref_md_count=$(find "$REF" -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
-if [ "$ref_md_count" -eq 4 ]; then
-  ok "references/ has 4 .md files"
-else
-  err "references/ must have exactly 4 .md files (found $ref_md_count)"
-fi
-for f in craft-dimensions transform analysis blending; do
+
+# Required top-level reference files. Generated files allowed alongside them: voices.md.
+required_ref="craft-dimensions transform analysis blending"
+generated_ref="voices"
+for f in $required_ref; do
   [ -f "$REF/$f.md" ] || err "references/$f.md missing"
 done
+_allowed=" $required_ref $generated_ref "
+while IFS= read -r f; do
+  _b="$(basename "$f" .md)"
+  case "$_allowed" in
+    *" $_b "*) ;;
+    *) err "unexpected top-level file: references/$_b.md" ;;
+  esac
+done < <(find "$REF" -maxdepth 1 -type f -name '*.md')
+ok "references/ top-level files: all required present, no unexpected extras"
+
+# --- references/voices.md matches scripts/build_index.sh output ---
+if [ -f "$ROOT/scripts/build_index.sh" ]; then
+  _tmp_idx="$(mktemp)"
+  bash "$ROOT/scripts/build_index.sh" "$_tmp_idx" >/dev/null
+  if diff -u "$REF/voices.md" "$_tmp_idx" >/dev/null 2>&1; then
+    ok "references/voices.md is up to date"
+  else
+    err "references/voices.md is stale — run: bash scripts/build_index.sh"
+  fi
+  rm -f "$_tmp_idx"
+else
+  err "scripts/build_index.sh missing"
+fi
 
 # --- references/authors/ ---
 AUTH="$REF/authors"
@@ -102,6 +123,30 @@ for r in $registers; do
   echo "$voices_block" | grep -iq "${r%%-*}" || err "register '$r' not listed in SKILL.md Voices section"
 done
 ok "all 6 registers listed in SKILL.md and backed by a profile file"
+
+# --- SKILL.md routes /superwriter list to the generated index ---
+if grep -q 'references/voices.md' "$SKILL_DIR/SKILL.md"; then
+  ok "SKILL.md routes /superwriter list to references/voices.md"
+else
+  err "SKILL.md must route /superwriter list to references/voices.md"
+fi
+
+# --- SKILL.md documents the strength dial ---
+if grep -q '^## Strength' "$SKILL_DIR/SKILL.md" \
+   && grep -Eq '\blight\b'  "$SKILL_DIR/SKILL.md" \
+   && grep -Eq '\bmedium\b' "$SKILL_DIR/SKILL.md" \
+   && grep -Eq '\bstrong\b' "$SKILL_DIR/SKILL.md"; then
+  ok "SKILL.md documents the strength dial (light/medium/strong)"
+else
+  err "SKILL.md must have a ## Strength section naming light, medium, and strong"
+fi
+
+# --- SKILL.md has the pre-return self-check ---
+if grep -q '^## Before returning' "$SKILL_DIR/SKILL.md"; then
+  ok "SKILL.md has the ## Before returning self-check"
+else
+  err "SKILL.md must have a ## Before returning section"
+fi
 
 if [ "$fail" -ne 0 ]; then
   echo "" >&2

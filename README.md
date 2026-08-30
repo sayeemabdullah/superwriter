@@ -61,9 +61,23 @@ Registers work the same way — `/superwriter academic`, `/superwriter legal`,
 A short prompt is treated as *generate*; more than a paragraph of supplied text is treated
 as *transform*. If it's ambiguous, say which you want.
 
+### Strength
+
+Add `light`, `medium`, or `strong` after the voice to set how hard the style is pushed.
+`medium` is the default.
+
+```
+/superwriter Hemingway light — a paragraph about a delayed train
+/superwriter Woolf strong — the same paragraph
+```
+
+- **light** — one signature dimension, a touch. Reads as "influenced by."
+- **medium** — the two or three signature dimensions. Default.
+- **strong** — pushed hard, still short of self-parody.
+
 ### `/superwriter list`
 
-Prints the available voices.
+Prints every voice with its defining trait, from the generated `references/voices.md`.
 
 ### `/superwriter analyze`
 
@@ -156,12 +170,12 @@ superwriter/
     ├── transform.md              # Transform procedure + content-drift checks
     ├── analysis.md
     ├── blending.md
+    ├── voices.md                 # Generated index — loads only on /superwriter list
     ├── authors/                  # 12 author profiles
     └── registers/                # 6 functional-register profiles
 ```
 
-Only `SKILL.md` + `craft-dimensions.md` + **one** profile load per request (~8.4 KB
-worst case) — the token budget is a deliberate design constraint. Adding registers doesn't
+Only `SKILL.md` + `craft-dimensions.md` + **one** profile load per request (~9.6 KB worst case, against a 10 KB ceiling) — the token budget is a deliberate design constraint. Adding registers doesn't
 change the worst case: each register profile is smaller than the largest author profile,
 and still only one profile loads per request.
 
@@ -180,8 +194,13 @@ for a public repo — add your own profiles locally if you want them.
 ## Development
 
 - `bash scripts/validate_skill.sh` — checks the `superwriter/` source: two-key frontmatter,
-  one-line description, `name: superwriter`, 4 reference files, exactly 12 author profiles,
-  exactly 6 register profiles, and every voice listed in `SKILL.md` backed by a profile file.
+  one-line description, `name: superwriter`, the required reference files with no unexpected
+  extras, exactly 12 author profiles, exactly 6 register profiles, every voice listed in
+  `SKILL.md` backed by a profile file, the `## Strength` and `## Before returning` sections,
+  and that `references/voices.md` matches a fresh `build_index.sh` run.
+- `bash scripts/build_index.sh` — regenerates `superwriter/references/voices.md` (the
+  annotated list `/superwriter list` reads). Run it after adding, removing, or renaming a
+  profile; `validate_skill.sh` fails if the committed file is stale.
 - `bash scripts/package_skill.sh` — builds `superwriter.skill` (a ZIP with `superwriter/` at
   the archive root; `.skill` is just a renamed ZIP).
 
@@ -201,6 +220,6 @@ git push origin v2
 Copy an existing profile from `references/authors/` (or `references/registers/`), keep the
 same ten-part shape and compression, name where the style sits furthest from neutral, and
 end with the caricature failure to avoid. Then add the name to the Voices list in `SKILL.md`
-**and to the `description` field** — skipping that last step means it never triggers. Keep
+**and to the `description` field** — skipping that last step means it never triggers. Then run `bash scripts/build_index.sh` and commit the regenerated `references/voices.md` — CI fails if it is stale. Keep
 new profiles at or below the size of the largest existing one so the per-request budget
 holds.

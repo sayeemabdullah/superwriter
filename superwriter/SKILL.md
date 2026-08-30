@@ -14,6 +14,8 @@ Detect by whether substantial source text is present. Ambiguous: short prompt = 
 
 A "voice" is either a named author or a functional **register** (plain English, academic, journalistic, etc.). Both modes work with either, and the treatment is identical.
 
+Optional strength — `light`, `medium` (default), or `strong` — may follow the voice name; see **Strength** below.
+
 ## Routing
 
 Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. Two profiles only for a blend.
@@ -23,10 +25,21 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 | `references/transform.md` | Transform mode |
 | `references/analysis.md` | `/superwriter analyze` |
 | `references/blending.md` | `/superwriter blend` |
+| `references/voices.md` | `/superwriter list` |
 
 ## Commands
 
-`/superwriter <author|register>` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+`/superwriter <author|register> [light|medium|strong]` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+
+## Strength
+
+`light` · `medium` (default) · `strong` — how far to push the signature dimensions.
+
+- **light** — one signature dimension, gently. Reads as "influenced by," not pastiche.
+- **medium** — the two or three signature dimensions pushed. Default when unspecified.
+- **strong** — signature dimensions pushed hard, still stopping short of the caricature failure.
+
+Non-signature dimensions stay near neutral at every strength.
 
 ## Voices
 
@@ -37,6 +50,8 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 No profile for the author or register requested: say so, offer the nearest one, or offer to work from a passage the user supplies as a model. Never improvise a profile from general impressions — that produces caricature.
 
 A blend may pair an author with a register (e.g. Hemingway + journalistic).
+
+On `/superwriter list`, read `references/voices.md` and show each voice with its "furthest from neutral" line.
 
 ## Central rule: style is not tics
 
@@ -56,3 +71,11 @@ Before writing, name the two or three dimensions where this author or register s
 ## Output
 
 Short pieces and analysis inline. Longer generated work, or transforms over ~400 words, to a file. Don't echo the original back on a transform — the user has it.
+
+## Before returning
+
+Read the draft once against the profile:
+
+- Did you lean on the surface tics named in the **caricature failure** line? Cut them.
+- Are the dimensions that should sit ordinary actually ordinary, or did you push all of them? Pull the non-signature dimensions back toward neutral.
+- Transform mode: also run the content check in `references/transform.md` — every claim, fact, name, number, and the argument's order still present.
