@@ -11,6 +11,8 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REF="$ROOT/superwriter/references"
 OUT="${1-}"
 [ -n "$OUT" ] || OUT="$REF/voices.md"
+_tmp_out="$(mktemp)"
+trap 'rm -f "$_tmp_out"' EXIT
 
 emit_category() {
   local dir="$1" heading="$2" f title fn started=0
@@ -38,6 +40,7 @@ emit_category() {
   emit_category registers Registers
   emit_category forms Forms
   emit_category custom Custom
-} > "$OUT"
+} > "$_tmp_out"
 
+mv "$_tmp_out" "$OUT"
 echo "wrote $OUT"

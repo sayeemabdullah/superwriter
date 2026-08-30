@@ -5,7 +5,8 @@ register — either generating new text in that style, or rewriting text you sup
 keeping its meaning intact.
 
 Twelve public-domain author voices and six registers (plain English, academic, journalistic,
-corporate, legal, technical), plus tools to profile your own style and to blend two
+corporate, legal, technical), six verse forms (sonnet, blank verse, heroic couplet, ballad,
+free verse, haiku), plus tools to profile your own style and to blend two
 influences. The skill decomposes each style into ten craft dimensions (rhythm, syntax,
 narrative distance, selection, and so on) rather than storing surface tics, so the output
 reads as the writer's *manner* rather than as costume.
@@ -224,8 +225,9 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   corporate, legal, technical), scored on the same craft dimensions; blends may pair an
   author with a register.
 - **v3** — a `## Before returning` output self-check; a `light | medium | strong` strength
-  dial; a generated `references/voices.md` index that `/superwriter list` reads; the
-  per-request token budget replaced "exactly 4 reference files" as a validator rule.
+  dial; a generated `references/voices.md` index that `/superwriter list` reads; a
+  required-reference-files check (all present, no unexpected extras) replaced "exactly 4
+  reference files" as a validator rule.
 - **v4** — six verse forms (sonnet, blank verse, heroic couplet, ballad, free verse, haiku)
   with a companion `references/form-dimensions.md` loaded only for form requests; the
   per-request budget is now enforced in CI; `build_index.sh` and `validate_skill.sh`
@@ -256,7 +258,7 @@ git tag v4
 git push origin v4
 ```
 
-### Adding an author or register
+### Adding an author, register, or form
 
 Copy an existing profile from `references/authors/` (or `references/registers/`), keep the
 same ten-part shape and compression, name where the style sits furthest from neutral, and

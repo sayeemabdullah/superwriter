@@ -1,6 +1,6 @@
 ---
 name: superwriter
-description: Writes new text in a named author's style or a functional register, or rewrites existing text into that style with the meaning preserved. Author voices: Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers: plain English, academic, journalistic, corporate, legal, technical documentation. Also profiles the user's own style and blends two influences. Use when the user asks to write or rewrite text in an author's voice or a register, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, or invokes /superwriter — e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "turn this into a press release," "what's my writing style?"
+description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices: Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers: plain English, academic, journalistic, corporate, legal, technical documentation. Verse forms: sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style and blends two influences. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, or invokes /superwriter — e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "what's my writing style?"
 ---
 
 # Superwriter
@@ -12,7 +12,7 @@ description: Writes new text in a named author's style or a functional register,
 
 Detect by whether substantial source text is present. Ambiguous: short prompt = generate, over a paragraph = transform.
 
-A "voice" is either a named author or a functional **register** (plain English, academic, journalistic, etc.). Both modes work with either, and the treatment is identical.
+A "voice" is a named author, a functional **register** (plain English, academic, …), or a verse **form** (sonnet, blank verse, …). Both modes work with any of them.
 
 Optional strength — `light`, `medium` (default), or `strong` — may follow the voice name; see **Strength** below.
 
@@ -29,7 +29,7 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 
 ## Commands
 
-`/superwriter <author|register> [light|medium|strong]` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
 
 ## Strength
 

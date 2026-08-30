@@ -77,7 +77,7 @@ done < <(find "$REF" -maxdepth 1 -type f -name '*.md')
 if [ -f "$ROOT/scripts/build_index.sh" ]; then
   _tmp_idx="$(mktemp)"
   trap 'rm -f "$_tmp_idx"' EXIT
-  bash "$ROOT/scripts/build_index.sh" "$_tmp_idx" >/dev/null
+  bash "$ROOT/scripts/build_index.sh" "$_tmp_idx" >/dev/null || err "build_index.sh failed to generate the index"
   if diff -u "$REF/voices.md" "$_tmp_idx" >/dev/null 2>&1; then
     ok "references/voices.md is up to date"
   else
@@ -112,19 +112,21 @@ fi
 voices_block=$(awk '/^## Voices/{f=1;next} f && /^## /{exit} f{print}' "$SKILL_DIR/SKILL.md")
 
 authors="shakespeare austen hemingway woolf dickens twain poe wilde orwell kafka melville chekhov"
+_fail_before_authors=$fail
 for v in $authors; do
   [ -f "$AUTH/$v.md" ] || err "author profile missing: references/authors/$v.md"
   echo "$voices_block" | grep -iq "$v" || err "author '$v' not listed in SKILL.md Voices section"
 done
-ok "all 12 authors listed in SKILL.md and backed by a profile file"
+[ "$fail" -eq "$_fail_before_authors" ] && ok "all 12 authors listed in SKILL.md and backed by a profile file"
 
 registers="plain-english academic journalistic corporate legal technical"
+_fail_before_registers=$fail
 for r in $registers; do
   [ -f "$REG/$r.md" ] || err "register profile missing: references/registers/$r.md"
   # match on the first word of the slug (plain-english -> plain)
   echo "$voices_block" | grep -iq "${r%%-*}" || err "register '$r' not listed in SKILL.md Voices section"
 done
-ok "all 6 registers listed in SKILL.md and backed by a profile file"
+[ "$fail" -eq "$_fail_before_registers" ] && ok "all 6 registers listed in SKILL.md and backed by a profile file"
 
 # --- references/forms/ ---
 FORMS="$REF/forms"
@@ -137,11 +139,23 @@ else
 fi
 
 forms="sonnet blank-verse heroic-couplet ballad free-verse haiku"
+_fail_before_forms=$fail
 for v in $forms; do
   [ -f "$FORMS/$v.md" ] || err "form profile missing: references/forms/$v.md"
   echo "$voices_block" | grep -iq "${v%%-*}" || err "form '$v' not listed in SKILL.md Voices section"
 done
-ok "all 6 forms listed in SKILL.md and backed by a profile file"
+[ "$fail" -eq "$_fail_before_forms" ] && ok "all 6 forms listed in SKILL.md and backed by a profile file"
+
+# --- every voice under ## Voices is also named in the frontmatter description ---
+_desc=$(sed -n 's/^description: //p' "$SKILL_DIR/SKILL.md")
+_desc_fail=$fail
+for v in $authors $registers $forms; do
+  case "$(printf '%s' "$_desc" | tr 'A-Z' 'a-z')" in
+    *"${v%%-*}"*) ;;
+    *) err "voice '$v' is in ## Voices but not named in the frontmatter description" ;;
+  esac
+done
+[ "$fail" -eq "$_desc_fail" ] && ok "all voices named in the frontmatter description"
 
 # --- SKILL.md routes /superwriter list to the generated index ---
 if grep -q 'references/voices.md' "$SKILL_DIR/SKILL.md"; then
