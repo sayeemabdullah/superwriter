@@ -28,3 +28,14 @@
 | Legal / Contractual | precision over readability by design · defined terms doing the work pronouns would · exhaustive enumeration |
 | Plain English | low syntactic load as policy · the reader's task as the organizing principle · abstraction actively removed |
 | Technical Documentation | the reader is mid-task · imperative mood · structure optimized for scanning and non-linear entry |
+
+## Forms
+
+| Voice | Furthest from neutral |
+|---|---|
+| Ballad | the ballad stanza's swing · story told in leaps, not transitions · impersonal voice and incremental repetition |
+| Blank Verse | unrhymed iambic pentameter held as a felt pulse · the verse paragraph, not the stanza, as the unit · speech rhythm pulling against the meter |
+| Free Verse | lineation as the only fixed technique · the line-break carrying rhythm, emphasis, and syntax at once · cadence organised by breath and image, not by count |
+| Haiku | the cut between two images · concrete present-tense perception with no comment · radical compression |
+| Heroic Couplet | the closed couplet as a complete unit of sense · balance and antithesis inside the pair · wit built from the rhyme, not decorated by it |
+| Sonnet | the volta · a rhyme scheme tight enough to be felt as structure · a whole argument resolved in fourteen lines |
