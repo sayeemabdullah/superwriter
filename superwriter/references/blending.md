@@ -17,6 +17,8 @@ Blends work when the two sources are unlike each other on the borrowed dimension
 
 An author may be blended with a register (Hemingway's selection over the journalistic inverted pyramid; Woolf's distance in an academic frame). Same procedure — assign dimensions, don't average.
 
+A verse form may be blended with an author or register — the form supplies meter, lineation, rhyme, stanza, and turn; the other source supplies selection, emotional placement, and diction (e.g. a ballad with Poe's acceleration, a sonnet in Orwell's plainness).
+
 ## Rules
 
 - Both profiles' standing rules apply: no reproduced passages, no fabricated attribution.

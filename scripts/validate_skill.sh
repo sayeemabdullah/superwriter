@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Validate the superwriter/ skill source against SUPERWRITER-SPEC.md's checklist.
+# Validate the superwriter/ skill source against the design spec's checklist.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -57,8 +57,9 @@ REF="$SKILL_DIR/references"
 [ -d "$REF" ] || err "superwriter/references/ missing"
 
 # Required top-level reference files. Generated files allowed alongside them: voices.md.
-required_ref="craft-dimensions transform analysis blending"
+required_ref="craft-dimensions transform analysis blending form-dimensions"
 generated_ref="voices"
+_fail_before_reflayout=$fail
 for f in $required_ref; do
   [ -f "$REF/$f.md" ] || err "references/$f.md missing"
 done
@@ -70,12 +71,13 @@ while IFS= read -r f; do
     *) err "unexpected top-level file: references/$_b.md" ;;
   esac
 done < <(find "$REF" -maxdepth 1 -type f -name '*.md')
-ok "references/ top-level files: all required present, no unexpected extras"
+[ "$fail" -eq "$_fail_before_reflayout" ] && ok "references/ top-level files: all required present, no unexpected extras"
 
 # --- references/voices.md matches scripts/build_index.sh output ---
 if [ -f "$ROOT/scripts/build_index.sh" ]; then
   _tmp_idx="$(mktemp)"
-  bash "$ROOT/scripts/build_index.sh" "$_tmp_idx" >/dev/null
+  trap 'rm -f "$_tmp_idx"' EXIT
+  bash "$ROOT/scripts/build_index.sh" "$_tmp_idx" >/dev/null || err "build_index.sh failed to generate the index"
   if diff -u "$REF/voices.md" "$_tmp_idx" >/dev/null 2>&1; then
     ok "references/voices.md is up to date"
   else
@@ -110,19 +112,50 @@ fi
 voices_block=$(awk '/^## Voices/{f=1;next} f && /^## /{exit} f{print}' "$SKILL_DIR/SKILL.md")
 
 authors="shakespeare austen hemingway woolf dickens twain poe wilde orwell kafka melville chekhov"
+_fail_before_authors=$fail
 for v in $authors; do
   [ -f "$AUTH/$v.md" ] || err "author profile missing: references/authors/$v.md"
   echo "$voices_block" | grep -iq "$v" || err "author '$v' not listed in SKILL.md Voices section"
 done
-ok "all 12 authors listed in SKILL.md and backed by a profile file"
+[ "$fail" -eq "$_fail_before_authors" ] && ok "all 12 authors listed in SKILL.md and backed by a profile file"
 
 registers="plain-english academic journalistic corporate legal technical"
+_fail_before_registers=$fail
 for r in $registers; do
   [ -f "$REG/$r.md" ] || err "register profile missing: references/registers/$r.md"
   # match on the first word of the slug (plain-english -> plain)
   echo "$voices_block" | grep -iq "${r%%-*}" || err "register '$r' not listed in SKILL.md Voices section"
 done
-ok "all 6 registers listed in SKILL.md and backed by a profile file"
+[ "$fail" -eq "$_fail_before_registers" ] && ok "all 6 registers listed in SKILL.md and backed by a profile file"
+
+# --- references/forms/ ---
+FORMS="$REF/forms"
+[ -d "$FORMS" ] || err "superwriter/references/forms/ missing"
+forms_count=$(find "$FORMS" -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
+if [ "$forms_count" -eq 6 ]; then
+  ok "references/forms/ has exactly 6 .md files"
+else
+  err "references/forms/ must have exactly 6 .md files (found $forms_count)"
+fi
+
+forms="sonnet blank-verse heroic-couplet ballad free-verse haiku"
+_fail_before_forms=$fail
+for v in $forms; do
+  [ -f "$FORMS/$v.md" ] || err "form profile missing: references/forms/$v.md"
+  echo "$voices_block" | grep -iq "${v%%-*}" || err "form '$v' not listed in SKILL.md Voices section"
+done
+[ "$fail" -eq "$_fail_before_forms" ] && ok "all 6 forms listed in SKILL.md and backed by a profile file"
+
+# --- every voice under ## Voices is also named in the frontmatter description ---
+_desc=$(sed -n 's/^description: //p' "$SKILL_DIR/SKILL.md")
+_desc_fail=$fail
+for v in $authors $registers $forms; do
+  case "$(printf '%s' "$_desc" | tr 'A-Z' 'a-z')" in
+    *"${v%%-*}"*) ;;
+    *) err "voice '$v' is in ## Voices but not named in the frontmatter description" ;;
+  esac
+done
+[ "$fail" -eq "$_desc_fail" ] && ok "all voices named in the frontmatter description"
 
 # --- SKILL.md routes /superwriter list to the generated index ---
 if grep -q 'references/voices.md' "$SKILL_DIR/SKILL.md"; then
@@ -131,14 +164,15 @@ else
   err "SKILL.md must route /superwriter list to references/voices.md"
 fi
 
-# --- SKILL.md documents the strength dial ---
-if grep -q '^## Strength' "$SKILL_DIR/SKILL.md" \
-   && grep -Eq '\blight\b'  "$SKILL_DIR/SKILL.md" \
-   && grep -Eq '\bmedium\b' "$SKILL_DIR/SKILL.md" \
-   && grep -Eq '\bstrong\b' "$SKILL_DIR/SKILL.md"; then
+# --- SKILL.md documents the strength dial (checked within the ## Strength section) ---
+_strength_body=$(awk '/^## Strength/{f=1;next} f && /^## /{exit} f{print}' "$SKILL_DIR/SKILL.md")
+if [ -n "$_strength_body" ] \
+   && printf '%s' "$_strength_body" | grep -Eq '\blight\b' \
+   && printf '%s' "$_strength_body" | grep -Eq '\bmedium\b' \
+   && printf '%s' "$_strength_body" | grep -Eq '\bstrong\b'; then
   ok "SKILL.md documents the strength dial (light/medium/strong)"
 else
-  err "SKILL.md must have a ## Strength section naming light, medium, and strong"
+  err "SKILL.md ## Strength section must name light, medium, and strong in its body"
 fi
 
 # --- SKILL.md has the pre-return self-check ---
@@ -146,6 +180,47 @@ if grep -q '^## Before returning' "$SKILL_DIR/SKILL.md"; then
   ok "SKILL.md has the ## Before returning self-check"
 else
   err "SKILL.md must have a ## Before returning section"
+fi
+
+# --- per-request token budget (ceiling 10240 B) ---
+if python3 - "$SKILL_DIR" <<'PY'
+import os, sys
+root = sys.argv[1]
+CEIL = 10240
+
+def size(p):
+    return os.path.getsize(p) if os.path.exists(p) else 0
+
+def largest(d):
+    d = os.path.join(root, "references", d)
+    if not os.path.isdir(d):
+        return 0
+    return max([size(os.path.join(d, f)) for f in os.listdir(d)
+               if f.endswith(".md") and f != "README.md"] or [0])
+
+skill = size(os.path.join(root, "SKILL.md"))
+craft = size(os.path.join(root, "references", "craft-dimensions.md"))
+formd = size(os.path.join(root, "references", "form-dimensions.md"))
+
+normal = skill + craft + max(largest("authors"), largest("registers"))
+form = skill + formd + largest("forms") if formd else 0
+
+ok = True
+print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + largest prose profile)")
+if normal > CEIL:
+    print(f"FAIL: normal-path per-request load {normal} B exceeds {CEIL} B", file=sys.stderr)
+    ok = False
+if form:
+    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + largest form profile)")
+    if form > CEIL:
+        print(f"FAIL: form-path per-request load {form} B exceeds {CEIL} B", file=sys.stderr)
+        ok = False
+sys.exit(0 if ok else 1)
+PY
+then
+  ok "per-request token budget within 10240 B"
+else
+  err "per-request token budget exceeded"
 fi
 
 if [ "$fail" -ne 0 ]; then

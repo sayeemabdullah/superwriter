@@ -5,7 +5,8 @@ register — either generating new text in that style, or rewriting text you sup
 keeping its meaning intact.
 
 Twelve public-domain author voices and six registers (plain English, academic, journalistic,
-corporate, legal, technical), plus tools to profile your own style and to blend two
+corporate, legal, technical), six verse forms (sonnet, blank verse, heroic couplet, ballad,
+free verse, haiku), plus tools to profile your own style and to blend two
 influences. The skill decomposes each style into ten craft dimensions (rhythm, syntax,
 narrative distance, selection, and so on) rather than storing surface tics, so the output
 reads as the writer's *manner* rather than as costume.
@@ -139,6 +140,24 @@ No profile for the author or register you asked for? The skill says so and offer
 nearest one, or to work from a passage you supply as a model — it won't improvise a profile
 from general impressions, because that produces caricature.
 
+## The six verse forms
+
+Verse forms, scored on their own axes (meter, lineation, rhyme, stanza, enjambment, turn,
+sound, compression) in `references/form-dimensions.md`. A form request loads that file and
+one form profile — not the prose `craft-dimensions.md`.
+
+| Form | Furthest from neutral |
+|---|---|
+| **Sonnet** | The volta; a rhyme scheme felt as structure; a whole argument resolved in fourteen lines. |
+| **Blank verse** | Unrhymed iambic pentameter as a felt pulse; the verse paragraph as the unit; speech rhythm against the meter. |
+| **Heroic couplet** | The closed couplet as a complete unit of sense; balance and antithesis inside the pair. |
+| **Ballad** | The ballad-stanza swing; story told in leaps; impersonal voice and incremental repetition. |
+| **Free verse** | Lineation as the only fixed technique; the line-break carrying rhythm, emphasis, and syntax at once. |
+| **Haiku** | The cut between two images; concrete present-tense perception with no comment; radical compression. |
+
+`/superwriter sonnet — a poem about leaving a house` generates; `[prose] /superwriter heroic
+couplet` transforms. A form may be blended with an author: `/superwriter blend ballad + Poe`.
+
 ## Worked example
 
 **Input:**
@@ -166,18 +185,21 @@ final detail carrying what nobody will say.
 superwriter/
 ├── SKILL.md                      # Router, mode detection, standing rules
 └── references/
-    ├── craft-dimensions.md       # Shared vocabulary — loads on every request
+    ├── craft-dimensions.md       # Shared vocabulary — loads on every prose request
+    ├── form-dimensions.md        # Verse vocabulary — loads on every form request
     ├── transform.md              # Transform procedure + content-drift checks
     ├── analysis.md
     ├── blending.md
     ├── voices.md                 # Generated index — loads only on /superwriter list
     ├── authors/                  # 12 author profiles
-    └── registers/                # 6 functional-register profiles
+    ├── registers/                # 6 functional-register profiles
+    └── forms/                    # 6 verse-form profiles
 ```
 
-Only `SKILL.md` + `craft-dimensions.md` + **one** profile load per request (~9.6 KB worst case, against a 10 KB ceiling) — the token budget is a deliberate design constraint. Adding registers doesn't
-change the worst case: each register profile is smaller than the largest author profile,
-and still only one profile loads per request.
+Each request loads `SKILL.md` plus **one** dimensions file plus **one** profile:
+`craft-dimensions.md` + an author or register profile for prose (~9.7 KB worst case), or
+`form-dimensions.md` + a form profile for verse (~9.4 KB worst case). The 10 KB ceiling is a
+deliberate design constraint, enforced by `scripts/validate_skill.sh`.
 
 ## Standing rules
 
@@ -191,13 +213,34 @@ and still only one profile loads per request.
 The roster is public-domain by design. Imitating living authors is legally fine but messier
 for a public repo — add your own profiles locally if you want them.
 
+## Release history
+
+Each release is a GitHub Release with `superwriter.skill` attached; install the latest.
+
+- **v1** — first release. Router (`SKILL.md`), the ten craft dimensions, generate and
+  transform modes, transform content-drift checks, style analysis, two-voice blending, and
+  twelve public-domain author voices (Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain,
+  Poe, Wilde, Orwell, Kafka, Melville, Chekhov). Validation + packaging + release CI.
+- **v2** — six functional writing registers (plain English, academic, journalistic,
+  corporate, legal, technical), scored on the same craft dimensions; blends may pair an
+  author with a register.
+- **v3** — a `## Before returning` output self-check; a `light | medium | strong` strength
+  dial; a generated `references/voices.md` index that `/superwriter list` reads; a
+  required-reference-files check (all present, no unexpected extras) replaced "exactly 4
+  reference files" as a validator rule.
+- **v4** — six verse forms (sonnet, blank verse, heroic couplet, ballad, free verse, haiku)
+  with a companion `references/form-dimensions.md` loaded only for form requests; the
+  per-request budget is now enforced in CI; `build_index.sh` and `validate_skill.sh`
+  hardened.
+
 ## Development
 
 - `bash scripts/validate_skill.sh` — checks the `superwriter/` source: two-key frontmatter,
   one-line description, `name: superwriter`, the required reference files with no unexpected
-  extras, exactly 12 author profiles, exactly 6 register profiles, every voice listed in
-  `SKILL.md` backed by a profile file, the `## Strength` and `## Before returning` sections,
-  and that `references/voices.md` matches a fresh `build_index.sh` run.
+  extras, exactly 12 author / 6 register / 6 form profiles, every voice listed in `SKILL.md`
+  backed by a profile file, the `## Strength` and `## Before returning` sections, that
+  `references/voices.md` matches a fresh `build_index.sh` run, and that the per-request
+  token load (normal path and form path) stays within 10240 bytes.
 - `bash scripts/build_index.sh` — regenerates `superwriter/references/voices.md` (the
   annotated list `/superwriter list` reads). Run it after adding, removing, or renaming a
   profile; `validate_skill.sh` fails if the committed file is stale.
@@ -211,11 +254,11 @@ with `superwriter.skill` attached.
 ### Cutting a release
 
 ```
-git tag v2
-git push origin v2
+git tag v4
+git push origin v4
 ```
 
-### Adding an author or register
+### Adding an author, register, or form
 
 Copy an existing profile from `references/authors/` (or `references/registers/`), keep the
 same ten-part shape and compression, name where the style sits furthest from neutral, and

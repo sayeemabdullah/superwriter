@@ -1,6 +1,6 @@
 ---
 name: superwriter
-description: Writes new text in a named author's style or a functional register, or rewrites existing text into that style with the meaning preserved. Author voices: Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers: plain English, academic, journalistic, corporate, legal, technical documentation. Also profiles the user's own style and blends two influences. Use when the user asks to write or rewrite text in an author's voice or a register, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, or invokes /superwriter — e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "turn this into a press release," "what's my writing style?"
+description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices: Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers: plain English, academic, journalistic, corporate, legal, technical documentation. Verse forms: sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style and blends two influences. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, or invokes /superwriter — e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "what's my writing style?"
 ---
 
 # Superwriter
@@ -12,13 +12,13 @@ description: Writes new text in a named author's style or a functional register,
 
 Detect by whether substantial source text is present. Ambiguous: short prompt = generate, over a paragraph = transform.
 
-A "voice" is either a named author or a functional **register** (plain English, academic, journalistic, etc.). Both modes work with either, and the treatment is identical.
+A "voice" is a named author, a functional **register** (plain English, academic, …), or a verse **form** (sonnet, blank verse, …). Both modes work with any of them.
 
 Optional strength — `light`, `medium` (default), or `strong` — may follow the voice name; see **Strength** below.
 
 ## Routing
 
-Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. Two profiles only for a blend.
+Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. A **verse form** request instead reads `references/form-dimensions.md` plus one `references/forms/<name>.md` (not `craft-dimensions.md`). Two profiles only for a blend; `/superwriter list` reads only `references/voices.md`.
 
 | Also read | When |
 |---|---|
@@ -29,7 +29,7 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 
 ## Commands
 
-`/superwriter <author|register> [light|medium|strong]` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
 
 ## Strength
 
@@ -47,6 +47,10 @@ Non-signature dimensions stay near neutral at every strength.
 
 **Registers:** Plain English · Academic · Journalistic · Corporate · Legal · Technical
 
+**Forms:** Sonnet · Blank verse · Heroic couplet · Ballad · Free verse · Haiku
+
+Transform into a verse form: line and stanza counts change, meaning does not; flag when the form cannot hold the content without cutting.
+
 No profile for the author or register requested: say so, offer the nearest one, or offer to work from a passage the user supplies as a model. Never improvise a profile from general impressions — that produces caricature.
 
 A blend may pair an author with a register (e.g. Hemingway + journalistic).
@@ -56,8 +60,6 @@ On `/superwriter list`, read `references/voices.md` and show each voice with its
 ## Central rule: style is not tics
 
 Default failure: Hemingway becomes short sentences about drinking, Woolf becomes semicolons and weather, Shakespeare becomes *forsooth* over modern syntax. Registers fail the same way: academic becomes passive jargon, legal becomes fake-archaic, corporate becomes buzzword soup. Surface features are the most quotable and least important part of a voice.
-
-Before writing, name the two or three dimensions where this author or register sits furthest from neutral. Write to those; leave the rest near ordinary. Pushing every dimension to its extreme produces parody — real writing is unusual in a few ways and unremarkable in the rest.
 
 ## Standing rules
 
