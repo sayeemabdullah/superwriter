@@ -223,6 +223,35 @@ else
   err "per-request token budget exceeded"
 fi
 
+# --- references/examples/ is 1:1 with the profiles, and each is well-formed ---
+EXAMPLES="$REF/examples"
+_fail_before_examples=$fail
+[ -d "$EXAMPLES" ] || err "superwriter/references/examples/ missing"
+if [ -d "$EXAMPLES" ]; then
+  # every profile has an example
+  for d in authors registers forms; do
+    for p in "$REF/$d"/*.md; do
+      [ -e "$p" ] || continue
+      b=$(basename "$p")
+      [ "$b" = "README.md" ] && continue
+      [ -f "$EXAMPLES/$b" ] || err "no example for references/$d/$b (expected references/examples/$b)"
+    done
+  done
+  # no orphan examples, and each is well-formed
+  for e in "$EXAMPLES"/*.md; do
+    [ -e "$e" ] || continue
+    b=$(basename "$e")
+    if [ ! -f "$REF/authors/$b" ] && [ ! -f "$REF/registers/$b" ] && [ ! -f "$REF/forms/$b" ]; then
+      err "orphan example references/examples/$b has no matching profile"
+    fi
+    grep -q '^\*\*Shows:\*\* .' "$e" || err "references/examples/$b has no '**Shows:** …' line"
+    # a passage: at least one non-empty line that is not the heading and not the Shows line
+    awk 'NR>1 && !/^#/ && !/^\*\*Shows:\*\*/ && NF {found=1} END{exit !found}' "$e" \
+      || err "references/examples/$b has no example passage"
+  done
+fi
+[ "$fail" -eq "$_fail_before_examples" ] && ok "references/examples/ is 1:1 with the profiles and well-formed"
+
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
   echo "validation FAILED" >&2

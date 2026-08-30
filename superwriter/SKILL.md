@@ -26,10 +26,11 @@ Always read `references/craft-dimensions.md` plus **one** profile — `reference
 | `references/analysis.md` | `/superwriter analyze` |
 | `references/blending.md` | `/superwriter blend` |
 | `references/voices.md` | `/superwriter list` |
+| `references/examples/<name>.md` | user asks for an example (`--example`) |
 
 ## Commands
 
-`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
+`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter <voice> --example` · `/superwriter list` · `/superwriter analyze` · `/superwriter blend <a> + <b>`
 
 ## Strength
 
