@@ -1,13 +1,13 @@
 # Ballad — example
 
-They asked her at the crossroads
-which road the rider took.
-She pointed to the river
-and would not raise her look.
+They stopped her where the roads divide
+and asked which road he took.
+She turned her face toward the stream
+and would not lift her look.
 
-They asked her at the churchyard
-which road the rider took.
-She pointed to the river.
-The water shut like a book.
+They stopped her by the churchyard wall
+and asked which road he took.
+She turned her face toward the stream.
+The river closed like a book.
 
-**Shows:** the four-stress / three-stress swing, rhyming ABCB; the story told in jumps; incremental repetition — the question returns, the answer darkens.
+**Shows:** common measure — a four-beat line answered by a three-beat line — rhyming ABCB; the story told in jumps; incremental repetition, the question unchanged and the last line darker.

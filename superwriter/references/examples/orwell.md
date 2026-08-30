@@ -1,5 +1,5 @@
 # Orwell — example
 
-The room smelled of boiled cabbage and old paper, and I noticed that I minded the paper more, which tells you something about me I would rather not have known. There were nine men at a table meant for six. Nobody complained. That was the part that stayed with me afterwards — not the crowding, but how completely everyone had agreed in advance not to mention it.
+The room smelled of wet wool and the tin pail they kept by the door, and I found I minded the pail less than the wool, which is the sort of thing you learn about yourself and would rather not. There were nine of us at a table built for six. Nobody said anything about it. That was what stayed with me afterward — not the crowding, but how quickly and completely we had all agreed not to name it.
 
 **Shows:** short Anglo-Saxon words, nothing decorative; a physical detail carrying the argument; the writer recording his own small meanness without excusing it.

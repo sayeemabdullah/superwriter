@@ -20,6 +20,8 @@ Optional strength — `light`, `medium` (default), or `strong` — may follow th
 
 Always read `references/craft-dimensions.md` plus **one** profile — `references/authors/<name>.md` or `references/registers/<name>.md`. A **verse form** request instead reads `references/form-dimensions.md` plus one `references/forms/<name>.md` (not `craft-dimensions.md`). Two profiles only for a blend; `/superwriter list` reads only `references/voices.md`.
 
+A bare `--example` request reads only `references/examples/<name>.md` — not a dimensions file or a profile.
+
 | Also read | When |
 |---|---|
 | `references/transform.md` | Transform mode |

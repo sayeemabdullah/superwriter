@@ -9,6 +9,6 @@ where paintings hung. The buyer's people bring
 their tape and torches; someone counts the rings
 the cups have left. It started when we ran
 the numbers one time more than reason can,
-and learned to call the ending several things.
+and, so rehearsed, the ending lost its sting.
 
 **Shows:** iambic pentameter with a mid-line caesura; the ABBAABBA octave sealed as a unit; the argument built to break at the volta.

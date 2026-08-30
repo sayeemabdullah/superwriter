@@ -1,5 +1,5 @@
 # Poe — example
 
-You will call it nerves. Very well — call it nerves; I have never denied the delicacy of my hearing, only its unsoundness, which is a wholly different thing and which you would do well to mark. The clock in the hall. You have heard it a thousand times and thought nothing. I have counted it. I have counted it through three nights, and I tell you calmly, quite calmly, that on the third night it changed its beat.
+You will say I imagined it, and I will not argue the point, beyond noting that a man who imagines a thing does not measure it, and I measured this one twice a day for eleven days. The stain above the bed. When I took the room it was the size of a coin — you would have called it damp and forgotten it. By the eighth day it had the shape of a hand. By the eleventh the hand had grown a second finger, and still the landlord assures me, smiling, that nothing in the house has changed.
 
-**Shows:** the narrator arguing for his own composure with the evidence that undoes it; sentences shortening as tension builds; one sound as the spine of the whole piece.
+**Shows:** the narrator building the case for his own reason with the evidence that undoes it; measured, reasonable sentences the content keeps undercutting; one fixated detail — a spreading stain — as the spine of the piece.
