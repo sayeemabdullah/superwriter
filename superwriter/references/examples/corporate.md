@@ -1,4 +1,4 @@
-# Corporate — example
+# Corporate: example
 
 Recommendation: sunset the Legacy API on March 31. Two customers still use it; both have migration paths and have been notified.
 

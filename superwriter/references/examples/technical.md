@@ -1,4 +1,4 @@
-# Technical — example
+# Technical: example
 
 To rotate the signing key:
 
