@@ -10,7 +10,7 @@
 | Dickens | animation of the inanimate · accumulative rhythm · comic characterization by fixed tic |
 | Hemingway | omission · parataxis · refusal to state feeling |
 | Kafka | impossible premise reported in bureaucratic calm · subordination that enacts entrapment |
-| Melville | register shifting without warning — technical manual to sermon to soliloquy inside a chapter · digression as structure |
+| Melville | register shifting without warning (technical manual to sermon to soliloquy inside a chapter) · digression as structure |
 | Orwell | plainness pursued as an ethical position · concrete detail deployed as argument |
 | Poe | narrator whose reliability collapses while insisting on his rationality · rhythm engineered for mounting pressure |
 | Shakespeare | syntactic inversion · figurative density · thought compressed into metaphor rather than statement |
