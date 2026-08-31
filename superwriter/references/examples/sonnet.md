@@ -1,9 +1,9 @@
-# Sonnet — example
+# Sonnet: example
 
 *(octave; the volta would fall at line 9)*
 
-The house is sold. We keep the smaller things —
-the clock, the chipped blue plate, the copper pan —
+The house is sold. We keep the smaller things,
+the clock, the chipped blue plate, the copper pan,
 and leave the walls their rectangles of tan
 where paintings hung. The buyer's people bring
 their tape and torches; someone counts the rings

@@ -1,4 +1,4 @@
-# Journalistic — example
+# Journalistic: example
 
 The city will close the Anderson Street bridge for six weeks beginning Monday, the transportation department said Thursday.
 

@@ -57,7 +57,7 @@ REF="$SKILL_DIR/references"
 [ -d "$REF" ] || err "superwriter/references/ missing"
 
 # Required top-level reference files. Generated files allowed alongside them: voices.md.
-required_ref="craft-dimensions transform analysis blending form-dimensions"
+required_ref="craft-dimensions transform analysis blending form-dimensions house-style"
 generated_ref="voices"
 _fail_before_reflayout=$fail
 for f in $required_ref; do
@@ -81,7 +81,7 @@ if [ -f "$ROOT/scripts/build_index.sh" ]; then
   if diff -u "$REF/voices.md" "$_tmp_idx" >/dev/null 2>&1; then
     ok "references/voices.md is up to date"
   else
-    err "references/voices.md is stale — run: bash scripts/build_index.sh"
+    err "references/voices.md is stale. Run: bash scripts/build_index.sh"
   fi
   rm -f "$_tmp_idx"
 else
@@ -165,7 +165,7 @@ done
 
 # --- description must be YAML-safe (no ": " which breaks plain-scalar parsing) ---
 if printf '%s' "$_desc" | grep -Eq ': |[[:space:]]#|:$'; then
-  err "SKILL.md description has a YAML plain-scalar hazard (': ', ' #', or a trailing ':') — use plain prose / ' — '"
+  err "SKILL.md description has a YAML plain-scalar hazard (': ', ' #', or a trailing ':'). Use plain prose."
 else
   ok "SKILL.md description is YAML-safe"
 fi
@@ -195,11 +195,11 @@ else
   err "SKILL.md must have a ## Before returning section"
 fi
 
-# --- per-request token budget (ceiling 10240 B) ---
+# --- per-request token budget (ceiling 13312 B) ---
 if python3 - "$SKILL_DIR" <<'PY'
 import os, sys
 root = sys.argv[1]
-CEIL = 10240
+CEIL = 13312
 
 def size(p):
     return os.path.getsize(p) if os.path.exists(p) else 0
@@ -214,24 +214,25 @@ def largest(d):
 skill = size(os.path.join(root, "SKILL.md"))
 craft = size(os.path.join(root, "references", "craft-dimensions.md"))
 formd = size(os.path.join(root, "references", "form-dimensions.md"))
+house = size(os.path.join(root, "references", "house-style.md"))
 
-normal = skill + craft + max(largest("authors"), largest("registers"))
-form = skill + formd + largest("forms") if formd else 0
+normal = skill + craft + house + max(largest("authors"), largest("registers"), largest("custom"))
+form = skill + formd + house + largest("forms") if formd else 0
 
 ok = True
-print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + largest prose profile)", flush=True)
+print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + house-style {house} + largest prose profile)", flush=True)
 if normal > CEIL:
     print(f"FAIL: normal-path per-request load {normal} B exceeds {CEIL} B", file=sys.stderr)
     ok = False
 if form:
-    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + largest form profile)", flush=True)
+    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + house-style {house} + largest form profile)", flush=True)
     if form > CEIL:
         print(f"FAIL: form-path per-request load {form} B exceeds {CEIL} B", file=sys.stderr)
         ok = False
 sys.exit(0 if ok else 1)
 PY
 then
-  ok "per-request token budget within 10240 B"
+  ok "per-request token budget within 13312 B"
 else
   err "per-request token budget exceeded"
 fi
@@ -281,6 +282,21 @@ for d in authors registers forms custom; do
   done
 done
 [ "$fail" -eq "$_fail_before_shape" ] && ok "all profiles have the load-bearing shape (title, furthest-from-neutral, >=8 bullets, writing-it)"
+
+# --- no em/en dashes anywhere in superwriter/** (house style) ---
+# ubuntu-latest has GNU grep with -P; BSD/macOS grep does not, so fall back to
+# the UTF-8 byte sequences for U+2014 / U+2013.
+if echo | grep -qP '' 2>/dev/null; then
+  _dash_hits=$(grep -rlP '\x{2014}|\x{2013}' "$SKILL_DIR" 2>/dev/null || true)
+else
+  _dash_hits=$(LC_ALL=C grep -rlE "$(printf '\xe2\x80\x94|\xe2\x80\x93')" "$SKILL_DIR" 2>/dev/null || true)
+fi
+if [ -n "$_dash_hits" ]; then
+  err "em/en dash found in superwriter/ (house style forbids it):"
+  printf '%s\n' "$_dash_hits" | sed 's/^/       /' >&2
+else
+  ok "no em/en dashes in superwriter/ (house style)"
+fi
 
 if [ "$fail" -ne 0 ]; then
   echo "" >&2

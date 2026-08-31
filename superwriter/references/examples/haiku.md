@@ -1,6 +1,6 @@
-# Haiku — example
+# Haiku: example
 
-Long meeting —
+Long meeting.
 on the sill a fly
 turns the winter light
 

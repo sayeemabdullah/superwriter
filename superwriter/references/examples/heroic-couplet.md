@@ -1,4 +1,4 @@
-# Heroic Couplet — example
+# Heroic Couplet: example
 
 He swore the plan was proof against mischance;
 it failed, and he revised it in advance.
