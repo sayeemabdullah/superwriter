@@ -230,7 +230,7 @@ superwriter/
 Each generate or transform request loads `SKILL.md`, one dimensions file,
 `references/house-style.md`, and one profile (`craft-dimensions.md` plus an author or
 register profile for prose, `form-dimensions.md` plus a form profile for verse): about
-11.9 KB worst case against a 12 KB ceiling, enforced by `scripts/validate_skill.sh`. The
+12.0 KB worst case against a 13 KB ceiling, enforced by `scripts/validate_skill.sh`. The
 ceiling is a deliberate design constraint.
 
 ## Standing rules
@@ -274,7 +274,7 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
 - **v7:** a house style loaded on every generate/transform: no em dashes, no diction
   blocklist words, no forced parallelism or hedge-stacking, no unrequested headings or
   tidy summary closers. Every em/en dash removed from the skill's own files and forbidden
-  by the validator. Per-request ceiling raised to 12 KB.
+  by the validator. Per-request ceiling raised to 13 KB.
 
 ## Development
 

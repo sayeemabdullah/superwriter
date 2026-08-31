@@ -81,3 +81,4 @@ Read the draft once against the profile:
 - Did you lean on the surface tics named in the **caricature failure** line? Cut them.
 - Are the dimensions that should sit ordinary actually ordinary, or did you push all of them? Pull the non-signature dimensions back toward neutral.
 - Transform mode: run the content check in `references/transform.md`.
+- House style: any em dash, blocklist diction, forced rule-of-three, hedging on every clause, unrequested heading, or tidy summary closer? Cut it. See `references/house-style.md`.

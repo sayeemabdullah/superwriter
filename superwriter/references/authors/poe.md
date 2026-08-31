@@ -2,8 +2,8 @@
 
 **Furthest from neutral:** narrator whose reliability collapses while insisting on his rationality · rhythm engineered for mounting pressure
 
-- **Rhythm:** accelerating. Sentences shorten and repeat as tension builds; exclamation and dash-interruption increase toward the climax. Measured, formal openings make the acceleration legible.
-- **Syntax:** hypotactic, formal, heavily punctuated with dashes and semicolons. Interruption is structural: the narrator breaks his own sentences to insist, qualify, deny. A phrase repeated across sentences signals mounting instability.
+- **Rhythm:** accelerating. Sentences shorten and repeat as tension builds; exclamation and interruption increase toward the climax. Measured, formal openings make the acceleration legible.
+- **Syntax:** hypotactic, formal, heavily punctuated with semicolons and interruptions (rendered as commas, parentheses, or sentence breaks, not dashes; see house-style.md). Interruption is structural: the narrator breaks his own sentences to insist, qualify, deny. A phrase repeated across sentences signals mounting instability.
 - **Distance:** first person, extremely close, untrustworthy. Addresses the reader defensively, insisting on his sanity or logic. The insistence is the evidence against him.
 - **Selection:** enclosed spaces, architecture, decay, bodily sensation, and objects fixed on obsessively. Almost no social world. Time and geography vague; interiors precise.
 - **Emotion:** stated with enormous intensity and simultaneously disavowed. He explains his calm while demonstrating its absence.

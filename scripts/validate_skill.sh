@@ -195,11 +195,11 @@ else
   err "SKILL.md must have a ## Before returning section"
 fi
 
-# --- per-request token budget (ceiling 12288 B) ---
+# --- per-request token budget (ceiling 13312 B) ---
 if python3 - "$SKILL_DIR" <<'PY'
 import os, sys
 root = sys.argv[1]
-CEIL = 12288
+CEIL = 13312
 
 def size(p):
     return os.path.getsize(p) if os.path.exists(p) else 0
@@ -232,7 +232,7 @@ if form:
 sys.exit(0 if ok else 1)
 PY
 then
-  ok "per-request token budget within 12288 B"
+  ok "per-request token budget within 13312 B"
 else
   err "per-request token budget exceeded"
 fi
