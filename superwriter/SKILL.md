@@ -18,7 +18,7 @@ Optional strength — `light`, `medium` (default), or `strong` — may follow th
 
 ## Routing
 
-Read `references/craft-dimensions.md` plus **one** profile — resolved by name against `authors/`, then `registers/`, then `custom/`. A **verse form** request reads `references/form-dimensions.md` plus one `references/forms/<name>.md` instead (no `craft-dimensions.md`). A blend reads two profiles. `/superwriter list` and a bare `--example` read only their own file (see the table).
+Read `references/craft-dimensions.md` and `references/house-style.md` plus **one** profile, resolved by name against `authors/`, then `registers/`, then `custom/`. A **verse form** request reads `references/form-dimensions.md` and `references/house-style.md` plus one `references/forms/<name>.md` (no `craft-dimensions.md`). A blend reads two profiles. `/superwriter list` and a bare `--example` read only their own file (see the table).
 
 | Also read | When |
 |---|---|

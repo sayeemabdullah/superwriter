@@ -57,7 +57,7 @@ REF="$SKILL_DIR/references"
 [ -d "$REF" ] || err "superwriter/references/ missing"
 
 # Required top-level reference files. Generated files allowed alongside them: voices.md.
-required_ref="craft-dimensions transform analysis blending form-dimensions"
+required_ref="craft-dimensions transform analysis blending form-dimensions house-style"
 generated_ref="voices"
 _fail_before_reflayout=$fail
 for f in $required_ref; do
@@ -195,11 +195,11 @@ else
   err "SKILL.md must have a ## Before returning section"
 fi
 
-# --- per-request token budget (ceiling 10240 B) ---
+# --- per-request token budget (ceiling 12288 B) ---
 if python3 - "$SKILL_DIR" <<'PY'
 import os, sys
 root = sys.argv[1]
-CEIL = 10240
+CEIL = 12288
 
 def size(p):
     return os.path.getsize(p) if os.path.exists(p) else 0
@@ -214,24 +214,25 @@ def largest(d):
 skill = size(os.path.join(root, "SKILL.md"))
 craft = size(os.path.join(root, "references", "craft-dimensions.md"))
 formd = size(os.path.join(root, "references", "form-dimensions.md"))
+house = size(os.path.join(root, "references", "house-style.md"))
 
-normal = skill + craft + max(largest("authors"), largest("registers"))
-form = skill + formd + largest("forms") if formd else 0
+normal = skill + craft + house + max(largest("authors"), largest("registers"), largest("custom"))
+form = skill + formd + house + largest("forms") if formd else 0
 
 ok = True
-print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + largest prose profile)", flush=True)
+print(f"normal path: {normal} B (SKILL {skill} + craft {craft} + house-style {house} + largest prose profile)", flush=True)
 if normal > CEIL:
     print(f"FAIL: normal-path per-request load {normal} B exceeds {CEIL} B", file=sys.stderr)
     ok = False
 if form:
-    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + largest form profile)", flush=True)
+    print(f"form path:   {form} B (SKILL {skill} + form-dimensions {formd} + house-style {house} + largest form profile)", flush=True)
     if form > CEIL:
         print(f"FAIL: form-path per-request load {form} B exceeds {CEIL} B", file=sys.stderr)
         ok = False
 sys.exit(0 if ok else 1)
 PY
 then
-  ok "per-request token budget within 10240 B"
+  ok "per-request token budget within 12288 B"
 else
   err "per-request token budget exceeded"
 fi
