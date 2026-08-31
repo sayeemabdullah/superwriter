@@ -46,7 +46,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           tag="${GITHUB_REF_NAME}"
-          notes="\`superwriter.skill\` — upload to Claude via Customize → Skills → Create skill → Upload a skill. Built from \`superwriter/\` at ${tag} and validated by \`scripts/validate_skill.sh\`."
+          notes="\`superwriter.skill\`: upload to Claude via Customize → Skills → Create skill → Upload a skill. Built from \`superwriter/\` at ${tag} and validated by \`scripts/validate_skill.sh\`."
           gh release create "$tag" superwriter.skill \
             --title "$tag" \
             --notes "$notes"

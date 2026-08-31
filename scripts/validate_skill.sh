@@ -81,7 +81,7 @@ if [ -f "$ROOT/scripts/build_index.sh" ]; then
   if diff -u "$REF/voices.md" "$_tmp_idx" >/dev/null 2>&1; then
     ok "references/voices.md is up to date"
   else
-    err "references/voices.md is stale — run: bash scripts/build_index.sh"
+    err "references/voices.md is stale. Run: bash scripts/build_index.sh"
   fi
   rm -f "$_tmp_idx"
 else
@@ -165,7 +165,7 @@ done
 
 # --- description must be YAML-safe (no ": " which breaks plain-scalar parsing) ---
 if printf '%s' "$_desc" | grep -Eq ': |[[:space:]]#|:$'; then
-  err "SKILL.md description has a YAML plain-scalar hazard (': ', ' #', or a trailing ':') — use plain prose / ' — '"
+  err "SKILL.md description has a YAML plain-scalar hazard (': ', ' #', or a trailing ':'). Use plain prose."
 else
   ok "SKILL.md description is YAML-safe"
 fi
@@ -282,6 +282,21 @@ for d in authors registers forms custom; do
   done
 done
 [ "$fail" -eq "$_fail_before_shape" ] && ok "all profiles have the load-bearing shape (title, furthest-from-neutral, >=8 bullets, writing-it)"
+
+# --- no em/en dashes anywhere in superwriter/** (house style) ---
+# ubuntu-latest has GNU grep with -P; BSD/macOS grep does not, so fall back to
+# the UTF-8 byte sequences for U+2014 / U+2013.
+if echo | grep -qP '' 2>/dev/null; then
+  _dash_hits=$(grep -rlP '\x{2014}|\x{2013}' "$SKILL_DIR" 2>/dev/null || true)
+else
+  _dash_hits=$(LC_ALL=C grep -rlE "$(printf '\xe2\x80\x94|\xe2\x80\x93')" "$SKILL_DIR" 2>/dev/null || true)
+fi
+if [ -n "$_dash_hits" ]; then
+  err "em/en dash found in superwriter/ (house style forbids it):"
+  printf '%s\n' "$_dash_hits" | sed 's/^/       /' >&2
+else
+  ok "no em/en dashes in superwriter/ (house style)"
+fi
 
 if [ "$fail" -ne 0 ]; then
   echo "" >&2
