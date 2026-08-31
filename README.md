@@ -283,7 +283,7 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   extras, exactly 12 author / 6 register / 6 form profiles, every voice listed in `SKILL.md`
   backed by a profile file, the `## Strength` and `## Before returning` sections, that
   `references/voices.md` matches a fresh `build_index.sh` run, that the per-request
-  token load (normal path and form path) stays within 12288 bytes, that
+  token load (normal path and form path) stays within 13312 bytes, that
   `references/examples/` is 1:1 with the profiles, that every profile has the
   load-bearing shape (title, furthest-from-neutral line, ≥ 8 dimension bullets, writing-it
   line), that `references/custom/` exists with its README and any custom profile has
