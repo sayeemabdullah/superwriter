@@ -4,8 +4,8 @@ A Claude skill that writes in a named author's manner, a functional writing regi
 verse form, either generating new text in that style, or rewriting text you supply while
 keeping its meaning intact.
 
-Twelve public-domain author voices and six registers (plain English, academic, journalistic,
-corporate, legal, technical), six verse forms (sonnet, blank verse, heroic couplet, ballad,
+Twelve public-domain author voices and seven registers (plain English, academic, journalistic,
+corporate, legal, technical, casual), six verse forms (sonnet, blank verse, heroic couplet, ballad,
 free verse, haiku), plus tools to profile your own style and to blend two
 influences. The skill decomposes each style into ten craft dimensions (rhythm, syntax,
 narrative distance, selection, and so on) rather than storing surface tics, so the output
@@ -61,6 +61,19 @@ Registers work the same way (`/superwriter academic`, `/superwriter legal`,
 
 A short prompt is treated as *generate*; more than a paragraph of supplied text is treated
 as *transform*. If it's ambiguous, say which you want.
+
+### Length target
+
+Add `to <N> words` (or a range, `to 80-100 words`) after the voice to condense or expand a
+transform to a target length. It hits the target using the voice's own habits (more or less
+subordination, clause-combining), not by trimming or padding. If the target can't be hit
+without dropping a claim, it says so instead of cutting silently.
+
+```
+[the same Q3 paragraph]
+
+/superwriter Orwell to 40 words
+```
 
 ### Strength
 
@@ -167,7 +180,7 @@ than made silently.
 | **Melville** | Register shifting without warning (manual to sermon to soliloquy); digression as structure. |
 | **Chekhov** | Refusal to conclude; moral neutrality toward characters the reader expects him to judge. |
 
-## The six registers
+## The seven registers
 
 Functional styles rather than individual writers, defined by the job the text has to do.
 
@@ -179,6 +192,7 @@ Functional styles rather than individual writers, defined by the job the text ha
 | **Corporate / Business** | Conclusion first (BLUF); action and owner named; brevity as respect for the reader's time. |
 | **Legal / Contractual** | Precision over readability by design; defined terms in place of pronouns; exhaustive enumeration. |
 | **Technical** | Reader is mid-task; imperative mood; structure optimized for scanning and non-linear entry. |
+| **Casual / Conversational** | Fragments and elision as the default unit; shared context assumed and never explained; warmth carried by rhythm and punctuation, not stated. |
 
 No profile for the author or register you asked for? The skill says so and offers the
 nearest one, or to work from a passage you supply as a model. It won't improvise a profile
@@ -297,12 +311,16 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   in supplied text while leaving voice, diction, and structure untouched. A companion
   `references/proofread.md` procedure loads only for this command, so it stays well under
   the per-request budget.
+- **v9:** a seventh register, Casual / Conversational, for texts and informal messages; and
+  a `to <N> words` (or range) length target on Transform, which hits the target using the
+  target voice's own habits rather than trimming or padding, and says so instead of cutting
+  a claim silently when the target can't be hit.
 
 ## Development
 
 - `bash scripts/validate_skill.sh` checks the `superwriter/` source: two-key frontmatter,
   one-line description, `name: superwriter`, the required reference files with no unexpected
-  extras, exactly 12 author / 6 register / 6 form profiles, every voice listed in `SKILL.md`
+  extras, exactly 12 author / 7 register / 6 form profiles, every voice listed in `SKILL.md`
   backed by a profile file, the `## Strength` and `## Before returning` sections, that
   `references/voices.md` matches a fresh `build_index.sh` run, that the per-request
   token load (normal path and form path) stays within 13312 bytes, that
@@ -323,8 +341,8 @@ with `superwriter.skill` attached.
 ### Cutting a release
 
 ```
-git tag v8
-git push origin v8
+git tag v9
+git push origin v9
 ```
 
 ### Adding an author, register, or form
