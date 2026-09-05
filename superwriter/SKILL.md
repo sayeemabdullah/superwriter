@@ -1,6 +1,6 @@
 ---
 name: superwriter
-description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices are Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers are plain English, academic, journalistic, corporate, legal, technical documentation. Verse forms are sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style, blends two influences, and proofreads text for spelling and grammar errors while leaving its style untouched. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, fix grammar and spelling, or invokes /superwriter, e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "fix the grammar and spelling in this," "what's my writing style?"
+description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices are Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers are plain English, academic, journalistic, corporate, legal, technical documentation, casual. Verse forms are sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style, blends two influences, and proofreads text for spelling and grammar errors while leaving its style untouched. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal / more casual, analyze a piece of writing's style, fix grammar and spelling, or invokes /superwriter, e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "fix the grammar and spelling in this," "make this sound like a text to a friend," "what's my writing style?"
 ---
 
 # Superwriter
@@ -15,6 +15,8 @@ Detect by whether substantial source text is present. Ambiguous: short prompt = 
 A "voice" is a named author, a functional **register**, or a verse **form**, and once you've made one, a **custom** profile of your own. Both modes work with any of them.
 
 An optional strength may follow the voice name: `light`, `medium` (default), or `strong`; see **Strength** below.
+
+Transform also takes an optional trailing length target: `to <N> words` or a range like `to 80-100 words`, e.g. `/superwriter Orwell to 100 words`. See `references/transform.md`.
 
 ## Routing
 
@@ -47,7 +49,7 @@ Non-signature dimensions stay near neutral at every strength.
 
 **Authors:** Shakespeare · Austen · Hemingway · Woolf · Dickens · Twain · Poe · Wilde · Orwell · Kafka · Melville · Chekhov
 
-**Registers:** Plain English · Academic · Journalistic · Corporate · Legal · Technical
+**Registers:** Plain English · Academic · Journalistic · Corporate · Legal · Technical · Casual
 
 **Forms:** Sonnet · Blank verse · Heroic couplet · Ballad · Free verse · Haiku
 

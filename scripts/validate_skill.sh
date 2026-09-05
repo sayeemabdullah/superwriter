@@ -102,10 +102,10 @@ fi
 REG="$REF/registers"
 [ -d "$REG" ] || err "superwriter/references/registers/ missing"
 reg_count=$(find "$REG" -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
-if [ "$reg_count" -eq 6 ]; then
-  ok "references/registers/ has exactly 6 .md files"
+if [ "$reg_count" -eq 7 ]; then
+  ok "references/registers/ has exactly 7 .md files"
 else
-  err "references/registers/ must have exactly 6 .md files (found $reg_count)"
+  err "references/registers/ must have exactly 7 .md files (found $reg_count)"
 fi
 
 # --- references/custom/ (user profile slot; ships with only README.md) ---
@@ -125,14 +125,14 @@ for v in $authors; do
 done
 [ "$fail" -eq "$_fail_before_authors" ] && ok "all 12 authors listed in SKILL.md and backed by a profile file"
 
-registers="plain-english academic journalistic corporate legal technical"
+registers="plain-english academic journalistic corporate legal technical casual"
 _fail_before_registers=$fail
 for r in $registers; do
   [ -f "$REG/$r.md" ] || err "register profile missing: references/registers/$r.md"
   # match on the first word of the slug (plain-english -> plain)
   echo "$voices_block" | grep -iq "${r%%-*}" || err "register '$r' not listed in SKILL.md Voices section"
 done
-[ "$fail" -eq "$_fail_before_registers" ] && ok "all 6 registers listed in SKILL.md and backed by a profile file"
+[ "$fail" -eq "$_fail_before_registers" ] && ok "all 7 registers listed in SKILL.md and backed by a profile file"
 
 # --- references/forms/ ---
 FORMS="$REF/forms"

@@ -23,6 +23,7 @@
 | Voice | Furthest from neutral |
 |---|---|
 | Academic | claims hedged to their actual strength and attributed · nominalized abstraction · the field foregrounded over the writer |
+| Casual / Conversational | fragments and elision as the default unit, not the exception · shared context assumed and never explained · warmth carried by rhythm and punctuation, not stated |
 | Corporate / Business | conclusion first (bottom line up front) · action and owner named · brevity offered as respect for the reader's time |
 | Journalistic | inverted pyramid · every contestable claim attributed to a named source · the paragraph as the unit, one or two sentences each |
 | Legal / Contractual | precision over readability by design · defined terms doing the work pronouns would · exhaustive enumeration |
