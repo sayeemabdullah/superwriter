@@ -26,7 +26,7 @@ Docs: <https://support.claude.com/en/articles/12512180-use-skills-in-claude>
 
 ## How to use
 
-The skill has two modes and three extra commands. It picks the mode automatically from
+The skill has two modes and four extra commands. It picks the mode automatically from
 whether you've supplied a body of text to work on.
 
 ### Generate: new writing in a voice
@@ -134,6 +134,22 @@ Works best when the two writers are unlike each other.
 
 An author may be blended with a register, not just with another author.
 
+### `/superwriter proofread`
+
+Fixes objective errors only: spelling, grammar, and punctuation. Voice, diction, sentence
+structure, and register are left exactly as written. It's the opposite emphasis of
+Transform: proofread never changes how something is said, only whether it's said correctly.
+
+```
+Our Q3 numbers missed target by 4%, mostly from the delayed EU launch. We we're
+pulling the launch foward to October and holding headcount flat.
+
+/superwriter proofread
+```
+
+Any fix that required a judgment call about intended meaning is flagged in one line rather
+than made silently.
+
 ## The twelve voices
 
 | Voice | Furthest from neutral |
@@ -217,6 +233,7 @@ superwriter/
     ├── form-dimensions.md        # Verse vocabulary, loads on every form request
     ├── house-style.md            # Anti-AI-tells rules, loads on every generate/transform
     ├── transform.md              # Transform procedure + content-drift checks
+    ├── proofread.md              # Proofread procedure, loads only on /superwriter proofread
     ├── analysis.md
     ├── blending.md
     ├── voices.md                 # Generated index, loads only on /superwriter list
@@ -231,7 +248,8 @@ Each generate or transform request loads `SKILL.md`, one dimensions file,
 `references/house-style.md`, and one profile (`craft-dimensions.md` plus an author or
 register profile for prose, `form-dimensions.md` plus a form profile for verse): about
 12.0 KB worst case against a 13 KB ceiling, enforced by `scripts/validate_skill.sh`. The
-ceiling is a deliberate design constraint.
+ceiling is a deliberate design constraint. `/superwriter proofread` loads only `SKILL.md`
+and `references/proofread.md`, well under that ceiling.
 
 ## Standing rules
 
@@ -275,6 +293,10 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   blocklist words, no forced parallelism or hedge-stacking, no unrequested headings or
   tidy summary closers. Every em/en dash removed from the skill's own files and forbidden
   by the validator. Per-request ceiling raised to 13 KB.
+- **v8:** `/superwriter proofread` fixes objective spelling, grammar, and punctuation errors
+  in supplied text while leaving voice, diction, and structure untouched. A companion
+  `references/proofread.md` procedure loads only for this command, so it stays well under
+  the per-request budget.
 
 ## Development
 
@@ -301,8 +323,8 @@ with `superwriter.skill` attached.
 ### Cutting a release
 
 ```
-git tag v7
-git push origin v7
+git tag v8
+git push origin v8
 ```
 
 ### Adding an author, register, or form

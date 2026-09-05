@@ -1,6 +1,6 @@
 ---
 name: superwriter
-description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices are Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers are plain English, academic, journalistic, corporate, legal, technical documentation. Verse forms are sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style and blends two influences. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, or invokes /superwriter, e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "what's my writing style?"
+description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices are Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers are plain English, academic, journalistic, corporate, legal, technical documentation. Verse forms are sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style, blends two influences, and proofreads text for spelling and grammar errors while leaving its style untouched. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal, analyze a piece of writing's style, fix grammar and spelling, or invokes /superwriter, e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "fix the grammar and spelling in this," "what's my writing style?"
 ---
 
 # Superwriter
@@ -23,6 +23,7 @@ Read `references/craft-dimensions.md` and `references/house-style.md` plus **one
 | Also read | When |
 |---|---|
 | `references/transform.md` | Transform mode |
+| `references/proofread.md` | `/superwriter proofread` |
 | `references/analysis.md` | `/superwriter analyze` |
 | `references/blending.md` | `/superwriter blend` |
 | `references/voices.md` | `/superwriter list` |
@@ -30,7 +31,7 @@ Read `references/craft-dimensions.md` and `references/house-style.md` plus **one
 
 ## Commands
 
-`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter <voice> --example` · `/superwriter list` · `/superwriter analyze` · `/superwriter analyze as <name>` · `/superwriter blend <a> + <b>`
+`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter <voice> --example` · `/superwriter list` · `/superwriter analyze` · `/superwriter analyze as <name>` · `/superwriter blend <a> + <b>` · `/superwriter proofread`
 
 ## Strength
 
@@ -69,6 +70,7 @@ Default failure: Hemingway becomes short sentences about drinking, Woolf becomes
 - **Archaic register is not archaic vocabulary.** Match syntax and habits of thought. *Thee* and *hath* over modern structure is the caricature failure in pure form.
 - **Flag bad fits** in one line (e.g. technical docs in Woolf's manner), then proceed if asked.
 - **Never invent** detail the source lacked to satisfy a style's rhythm. Leave the gap.
+- **Proofread fixes errors, not style.** Spelling, grammar, and punctuation only; voice, diction, and structure stay exactly as the writer left them. See `references/proofread.md`.
 
 ## Output
 
