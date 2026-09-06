@@ -88,16 +88,6 @@ else
   err "scripts/build_index.sh missing"
 fi
 
-# --- references/authors/ ---
-AUTH="$REF/authors"
-[ -d "$AUTH" ] || err "superwriter/references/authors/ missing"
-auth_count=$(find "$AUTH" -maxdepth 1 -type f -name '*.md' | wc -l | tr -d ' ')
-if [ "$auth_count" -eq 12 ]; then
-  ok "references/authors/ has exactly 12 .md files"
-else
-  err "references/authors/ must have exactly 12 .md files (found $auth_count)"
-fi
-
 # --- references/registers/ ---
 REG="$REF/registers"
 [ -d "$REG" ] || err "superwriter/references/registers/ missing"
@@ -116,14 +106,6 @@ CUSTOM="$REF/custom"
 
 # --- every voice in SKILL.md's Voices section has a matching profile file ---
 voices_block=$(awk '/^## Voices/{f=1;next} f && /^## /{exit} f{print}' "$SKILL_DIR/SKILL.md")
-
-authors="shakespeare austen hemingway woolf dickens twain poe wilde orwell kafka melville chekhov"
-_fail_before_authors=$fail
-for v in $authors; do
-  [ -f "$AUTH/$v.md" ] || err "author profile missing: references/authors/$v.md"
-  echo "$voices_block" | grep -iq "$v" || err "author '$v' not listed in SKILL.md Voices section"
-done
-[ "$fail" -eq "$_fail_before_authors" ] && ok "all 12 authors listed in SKILL.md and backed by a profile file"
 
 registers="plain-english academic journalistic corporate legal technical casual"
 _fail_before_registers=$fail
@@ -155,7 +137,7 @@ done
 # --- every voice under ## Voices is also named in the frontmatter description ---
 _desc=$(sed -n 's/^description: //p' "$SKILL_DIR/SKILL.md")
 _desc_fail=$fail
-for v in $authors $registers $forms; do
+for v in $registers $forms; do
   case "$(printf '%s' "$_desc" | tr 'A-Z' 'a-z')" in
     *"${v%%-*}"*) ;;
     *) err "voice '$v' is in ## Voices but not named in the frontmatter description" ;;
@@ -195,11 +177,11 @@ else
   err "SKILL.md must have a ## Before returning section"
 fi
 
-# --- per-request token budget (ceiling 13312 B) ---
+# --- per-request token budget (ceiling 12800 B) ---
 if python3 - "$SKILL_DIR" <<'PY'
 import os, sys
 root = sys.argv[1]
-CEIL = 13312
+CEIL = 12800
 
 def size(p):
     return os.path.getsize(p) if os.path.exists(p) else 0
@@ -216,7 +198,7 @@ craft = size(os.path.join(root, "references", "craft-dimensions.md"))
 formd = size(os.path.join(root, "references", "form-dimensions.md"))
 house = size(os.path.join(root, "references", "house-style.md"))
 
-normal = skill + craft + house + max(largest("authors"), largest("registers"), largest("custom"))
+normal = skill + craft + house + max(largest("registers"), largest("custom"))
 form = skill + formd + house + largest("forms") if formd else 0
 
 ok = True
@@ -232,7 +214,7 @@ if form:
 sys.exit(0 if ok else 1)
 PY
 then
-  ok "per-request token budget within 13312 B"
+  ok "per-request token budget within 12800 B"
 else
   err "per-request token budget exceeded"
 fi
@@ -243,7 +225,7 @@ _fail_before_examples=$fail
 [ -d "$EXAMPLES" ] || err "superwriter/references/examples/ missing"
 if [ -d "$EXAMPLES" ]; then
   # every profile has an example
-  for d in authors registers forms; do
+  for d in registers forms; do
     for p in "$REF/$d"/*.md; do
       [ -e "$p" ] || continue
       b=$(basename "$p")
@@ -255,7 +237,7 @@ if [ -d "$EXAMPLES" ]; then
   for e in "$EXAMPLES"/*.md; do
     [ -e "$e" ] || continue
     b=$(basename "$e")
-    if [ ! -f "$REF/authors/$b" ] && [ ! -f "$REF/registers/$b" ] && [ ! -f "$REF/forms/$b" ]; then
+    if [ ! -f "$REF/registers/$b" ] && [ ! -f "$REF/forms/$b" ]; then
       err "orphan example references/examples/$b has no matching profile"
     fi
     head -1 "$e" | grep -q '^# ' || err "references/examples/$b: line 1 is not a '# Title' heading"
@@ -267,9 +249,9 @@ if [ -d "$EXAMPLES" ]; then
 fi
 [ "$fail" -eq "$_fail_before_examples" ] && ok "references/examples/ is 1:1 with the profiles and well-formed"
 
-# --- every author/register/form profile has the load-bearing shape ---
+# --- every register/form/custom profile has the load-bearing shape ---
 _fail_before_shape=$fail
-for d in authors registers forms custom; do
+for d in registers forms custom; do
   for p in "$REF/$d"/*.md; do
     [ -e "$p" ] || continue
     b=$(basename "$p")

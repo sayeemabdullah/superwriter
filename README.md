@@ -1,15 +1,15 @@
 # superwriter
 
-A Claude skill that writes in a named author's manner, a functional writing register, or a
-verse form, either generating new text in that style, or rewriting text you supply while
-keeping its meaning intact.
+A Claude skill that writes in a functional writing register or a verse form, either
+generating new text in that style, or rewriting text you supply while keeping its meaning
+intact.
 
-Twelve public-domain author voices and seven registers (plain English, academic, journalistic,
-corporate, legal, technical, casual), six verse forms (sonnet, blank verse, heroic couplet, ballad,
-free verse, haiku), plus tools to profile your own style and to blend two
-influences. The skill decomposes each style into ten craft dimensions (rhythm, syntax,
-narrative distance, selection, and so on) rather than storing surface tics, so the output
-reads as the writer's *manner* rather than as costume.
+Seven registers (plain English, academic, journalistic, corporate, legal, technical,
+casual), six verse forms (sonnet, blank verse, heroic couplet, ballad, free verse, haiku),
+plus tools to fix grammar and spelling, profile your own style, and blend two influences.
+The skill decomposes each style into ten craft dimensions (rhythm, syntax, narrative
+distance, selection, and so on) rather than storing surface tics, so the output reads as
+the register's *manner* rather than as costume.
 
 The skill is stateless. It never writes files to your account.
 
@@ -31,33 +31,32 @@ whether you've supplied a body of text to work on.
 
 ### Generate: new writing in a voice
 
-Name an author and describe what you want. Use `:` (or `-`) to separate the author from the
-brief.
+Name a register and describe what you want. Use `:` (or `-`) to separate the register from
+the brief.
 
 ```
-/superwriter Hemingway: a scene where two people decide to separate
-/superwriter Austen: a letter politely declining a dinner invitation
-/superwriter Woolf: a paragraph about waiting for a train
+/superwriter corporate: a note declining a meeting invite
 /superwriter journalistic: a 150-word story on a local bridge closure
 /superwriter plain English: instructions for resetting a password
+/superwriter casual: a text bailing on plans tonight
 ```
 
 ### Transform: rewrite existing text in a voice
 
-Paste or write the text, then add `/superwriter <author>`. The rewrite changes rhythm,
+Paste or write the text, then add `/superwriter <register>`. The rewrite changes rhythm,
 syntax, distance, and diction, but every claim, fact, name, number, and the order of the
 argument is preserved. It won't invent detail to fill a stylistic rhythm, and it flags a
-bad fit (e.g. technical documentation in Woolf's manner) before proceeding.
+bad fit (e.g. legal drafting rewritten as casual) before proceeding.
 
 ```
 Our Q3 numbers missed target by 4%, mostly from the delayed EU launch.
 We're pulling the launch forward to October and holding headcount flat.
 
-/superwriter Orwell
+/superwriter journalistic
 ```
 
 Registers work the same way (`/superwriter academic`, `/superwriter legal`,
-`/superwriter corporate`) and are often the more practical choice for real documents.
+`/superwriter corporate`) and are usually the practical choice for real documents.
 
 A short prompt is treated as *generate*; more than a paragraph of supplied text is treated
 as *transform*. If it's ambiguous, say which you want.
@@ -72,7 +71,7 @@ without dropping a claim, it says so instead of cutting silently.
 ```
 [the same Q3 paragraph]
 
-/superwriter Orwell to 40 words
+/superwriter journalistic to 40 words
 ```
 
 ### Strength
@@ -81,8 +80,8 @@ Add `light`, `medium`, or `strong` after the voice to set how hard the style is 
 `medium` is the default.
 
 ```
-/superwriter Hemingway light: a paragraph about a delayed train
-/superwriter Woolf strong: the same paragraph
+/superwriter corporate light: a paragraph about a delayed launch
+/superwriter academic strong: the same paragraph
 ```
 
 - **light:** one signature dimension, a touch. Reads as "influenced by."
@@ -92,10 +91,10 @@ Add `light`, `medium`, or `strong` after the voice to set how hard the style is 
 ### `/superwriter <voice> --example`
 
 Show a short, newly written passage in a voice (with a note on which craft dimensions it
-demonstrates) before you commit to a full piece. Works for any author, register, or form.
+demonstrates) before you commit to a full piece. Works for any register or form.
 
 ```
-/superwriter Woolf --example
+/superwriter casual --example
 /superwriter heroic couplet --example
 ```
 
@@ -136,16 +135,16 @@ third party from a pasted sample.
 ### `/superwriter blend <a> + <b>`
 
 Combines two voices by assigning dimensions to each source rather than averaging them
-(averaging just produces neutrality). It tells you which dimensions came from which author.
-Works best when the two writers are unlike each other.
+(averaging just produces neutrality). It tells you which dimensions came from which source.
+Works best when the two are unlike each other.
 
 ```
-/superwriter blend Hemingway + Woolf: a scene at a hospital bedside
-/superwriter blend Twain + Kafka: a man tries to renew a permit
-/superwriter blend Hemingway + journalistic: a dispatch from a flooded town
+/superwriter blend plain English + academic: an explainer for a general audience
+/superwriter blend corporate + journalistic: an internal update written like a dispatch
+/superwriter blend ballad + corporate: a status update as a story told in leaps
 ```
 
-An author may be blended with a register, not just with another author.
+A verse form may be blended with a register, not just two registers together.
 
 ### `/superwriter proofread`
 
@@ -163,26 +162,9 @@ pulling the launch foward to October and holding headcount flat.
 Any fix that required a judgment call about intended meaning is flagged in one line rather
 than made silently.
 
-## The twelve voices
-
-| Voice | Furthest from neutral |
-|---|---|
-| **Shakespeare** | Syntactic inversion; dense, mutating metaphor; thought worked out aloud and reversed mid-speech. |
-| **Austen** | Free indirect style; ironic distance; judgment delivered as if it were plain fact. |
-| **Hemingway** | Load-bearing omission; parataxis (clauses joined by *and*); feeling kept entirely in subtext. |
-| **Woolf** | Narrative distance that dissolves between minds mid-paragraph; time as depth rather than sequence. |
-| **Dickens** | The inanimate given intention; accumulative anaphoric rhythm; characters fixed by a single verbal tic. |
-| **Twain** | Vernacular first person; deadpan delivery; satire through a narrator who understands less than the reader. |
-| **Poe** | A narrator insisting on his rationality as it collapses; rhythm engineered for mounting pressure. |
-| **Wilde** | The epigram; received wisdom inverted; polished surface that treats sincerity as vulgar, until one plain line. |
-| **Orwell** | Plainness pursued as an ethical position; a concrete physical detail made to carry the argument. |
-| **Kafka** | An impossible premise reported in bureaucratic calm; subordination that enacts entrapment. |
-| **Melville** | Register shifting without warning (manual to sermon to soliloquy); digression as structure. |
-| **Chekhov** | Refusal to conclude; moral neutrality toward characters the reader expects him to judge. |
-
 ## The seven registers
 
-Functional styles rather than individual writers, defined by the job the text has to do.
+Functional styles, defined by the job the text has to do.
 
 | Register | Furthest from neutral |
 |---|---|
@@ -194,9 +176,9 @@ Functional styles rather than individual writers, defined by the job the text ha
 | **Technical** | Reader is mid-task; imperative mood; structure optimized for scanning and non-linear entry. |
 | **Casual / Conversational** | Fragments and elision as the default unit; shared context assumed and never explained; warmth carried by rhythm and punctuation, not stated. |
 
-No profile for the author or register you asked for? The skill says so and offers the
-nearest one, or to work from a passage you supply as a model. It won't improvise a profile
-from general impressions, because that produces caricature.
+No profile for the register you asked for? The skill says so and offers the nearest one, or
+to work from a passage you supply as a model. It won't improvise a profile from general
+impressions, because that produces caricature.
 
 ## The six verse forms
 
@@ -214,7 +196,8 @@ one form profile, not the prose `craft-dimensions.md`.
 | **Haiku** | The cut between two images; concrete present-tense perception with no comment; radical compression. |
 
 `/superwriter sonnet: a poem about leaving a house` generates; `[prose] /superwriter heroic
-couplet` transforms. A form may be blended with an author: `/superwriter blend ballad + Poe`.
+couplet` transforms. A form may be blended with a register: `/superwriter blend ballad +
+corporate`.
 
 ## Worked example
 
@@ -224,18 +207,17 @@ couplet` transforms. A form may be blended with an author: `/superwriter blend b
 The meeting ran long. Everyone was tired. Nobody wanted to be the one to say
 the project was dead, so we scheduled another meeting.
 
-/superwriter Hemingway
+/superwriter journalistic
 ```
 
 **Output (illustrative):**
 
-> The meeting ran long. The room was hot and the coffee was finished. Nobody
-> said the project was dead. It was dead and everyone knew it and nobody said
-> it. We agreed to meet again on Thursday. Somebody wrote it down.
+> The project is dead, according to three people in the room. No one said so directly.
+> The meeting ran long and ended, again, with another meeting scheduled.
 
 The facts are unchanged: the length, the fatigue, the unspoken conclusion, the next
-meeting. What changed is the parataxis, the repetition of *dead* and *said*, and the flat
-final detail carrying what nobody will say.
+meeting. What changed is the attribution, the front-loaded conclusion, and the paragraph
+built as one or two sentences at a time instead of a single narrated block.
 
 ## Structure
 
@@ -251,31 +233,28 @@ superwriter/
     ├── analysis.md
     ├── blending.md
     ├── voices.md                 # Generated index, loads only on /superwriter list
-    ├── authors/                  # 12 author profiles
-    ├── registers/                # 6 functional-register profiles
+    ├── registers/                # 7 functional-register profiles
     ├── forms/                    # 6 verse-form profiles
-    ├── examples/                 # 24 opt-in exemplars, load only on --example
+    ├── examples/                 # 13 opt-in exemplars, load only on --example
     └── custom/                   # your own profiles (ships empty), analyze as <name>
 ```
 
 Each generate or transform request loads `SKILL.md`, one dimensions file,
-`references/house-style.md`, and one profile (`craft-dimensions.md` plus an author or
-register profile for prose, `form-dimensions.md` plus a form profile for verse): about
-12.0 KB worst case against a 13 KB ceiling, enforced by `scripts/validate_skill.sh`. The
+`references/house-style.md`, and one profile (`craft-dimensions.md` plus a register
+profile for prose, `form-dimensions.md` plus a form profile for verse): about
+11.9 KB worst case against a 12.5 KB ceiling, enforced by `scripts/validate_skill.sh`. The
 ceiling is a deliberate design constraint. `/superwriter proofread` loads only `SKILL.md`
 and `references/proofread.md`, well under that ceiling.
 
 ## Standing rules
 
-- **No reproduced passages.** Writes in the manner; never quotes or reconstructs the
-  author's actual sentences.
-- **No fabricated attribution.** Output is pastiche. Forged letters, "unpublished
-  fragments," or quotes attributed to the author are declined.
 - **Transform: meaning is fixed.** Every claim, fact, name, number, and the argument's order
   survives.
+- **Proofread fixes errors, not style.** Spelling, grammar, and punctuation only.
+- **`analyze as` is you.** A custom profile only ever comes from your own writing.
 
-The roster is public-domain by design. Imitating living authors is legally fine but messier
-for a public repo. Add your own profiles locally if you want them.
+Add your own custom profiles locally if you want a personal voice beyond the built-in
+registers and forms.
 
 ## Release history
 
@@ -315,15 +294,22 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   a `to <N> words` (or range) length target on Transform, which hits the target using the
   target voice's own habits rather than trimming or padding, and says so instead of cutting
   a claim silently when the target can't be hit.
+- **v10:** removed the twelve named-author voices and their examples: real-writer pastiche
+  wasn't the part people actually used, and it was the single biggest weight on `SKILL.md`.
+  Registers, forms, blending, custom profiles, proofreading, and the length target all
+  stay and now cover everything the skill does. The two author-only standing rules (no
+  reproduced passages, no fabricated attribution) are gone with them, since nothing left
+  imitates a real person. `SKILL.md` shrank from 6.4 KB to 5.7 KB and the enforced
+  per-request ceiling dropped from 13 KB to 12.5 KB.
 
 ## Development
 
 - `bash scripts/validate_skill.sh` checks the `superwriter/` source: two-key frontmatter,
   one-line description, `name: superwriter`, the required reference files with no unexpected
-  extras, exactly 12 author / 7 register / 6 form profiles, every voice listed in `SKILL.md`
+  extras, exactly 7 register / 6 form profiles, every voice listed in `SKILL.md`
   backed by a profile file, the `## Strength` and `## Before returning` sections, that
   `references/voices.md` matches a fresh `build_index.sh` run, that the per-request
-  token load (normal path and form path) stays within 13312 bytes, that
+  token load (normal path and form path) stays within 12800 bytes, that
   `references/examples/` is 1:1 with the profiles, that every profile has the
   load-bearing shape (title, furthest-from-neutral line, ≥ 8 dimension bullets, writing-it
   line), that `references/custom/` exists with its README and any custom profile has
@@ -341,13 +327,13 @@ with `superwriter.skill` attached.
 ### Cutting a release
 
 ```
-git tag v9
-git push origin v9
+git tag v10
+git push origin v10
 ```
 
-### Adding an author, register, or form
+### Adding a register or form
 
-Copy an existing profile from `references/authors/` (or `references/registers/`), keep the
+Copy an existing profile from `references/registers/` (or `references/forms/`), keep the
 same ten-part shape and compression, name where the style sits furthest from neutral, and
 end with the caricature failure to avoid. Then add the name to the Voices list in `SKILL.md`
 **and to the `description` field**. Skipping that last step means it never triggers. Then run `bash scripts/build_index.sh` and commit the regenerated `references/voices.md`; CI fails if it is stale.

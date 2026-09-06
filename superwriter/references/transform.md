@@ -28,7 +28,7 @@ A transform that sounds right but has dropped a claim, softened a conclusion, or
 | Argument order changes | Target front-loads conclusions; sequence got rearranged |
 | Tone shifts meaning | Irony added where the source was sincere, or removed where it wasn't |
 
-The last is subtle. A sincere complaint in Wilde's voice sounds arch. That may be wanted, but if it inverts the writer's stance, say so rather than shipping silently.
+The last is subtle. A sincere complaint recast into a corporate register can read as merely upbeat, flattening the writer's actual stance. That may be wanted, but if it inverts the writer's stance, say so rather than shipping silently.
 
 ## Length target
 
@@ -45,6 +45,5 @@ When the user gives one (`to <N> words`, or a range like `80-100 words`), hit it
 
 - Bad fits: say in one line what will be lost, then proceed if asked.
 - No length target given: length shifts with the target's syntactic density. Expected. Never pad to match length or cut content to fit a compressed style.
-- No reproduced passages from the author. No presenting output as authentic authorship.
 - If the source has something the voice can't express without inventing (a modern concept, a technical term with no period equivalent), keep it plainly and note it.
 - Preserve the source's headings, lists, and breaks unless asked otherwise.
