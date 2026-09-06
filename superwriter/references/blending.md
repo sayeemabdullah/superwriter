@@ -1,8 +1,8 @@
 # Blending Voices
 
-## Why this often beats pure imitation
+## Why this often beats a single voice
 
-Clean imitation of one author is pastiche and reads as such. A blend is how voice actually develops. Influences collide and produce something belonging to neither. Usually more useful to a writer than the pure imitation workflows.
+Clean imitation of one voice reads as pastiche. A blend is how a distinct style actually develops. Influences collide and produce something belonging to neither, and it's usually more useful than the pure single-voice workflow.
 
 ## Procedure
 
@@ -13,14 +13,11 @@ Clean imitation of one author is pastiche and reads as such. A blend is how voic
 
 ## Pairing
 
-Blends work when the two sources are unlike each other on the borrowed dimensions. Hemingway's selection with Woolf's distance produces something neither wrote. Two similar architectures produce a blend indistinguishable from either. If the user requests that, say so and suggest a more distant pairing.
+Blends work when the two sources are unlike each other on the borrowed dimensions. Plain English's directness with academic's hedged precision produces something neither register alone would write. Two similar profiles produce a blend indistinguishable from either. If the user requests that, say so and suggest a more distant pairing.
 
-An author may be blended with a register (Hemingway's selection over the journalistic inverted pyramid; Woolf's distance in an academic frame). Same procedure: assign dimensions, don't average.
-
-A verse form may be blended with an author or register. The form supplies meter, lineation, rhyme, stanza, and turn; the other source supplies selection, emotional placement, and diction (e.g. a ballad with Poe's acceleration, a sonnet in Orwell's plainness).
+A verse form may be blended with a register. The form supplies meter, lineation, rhyme, stanza, and turn; the register supplies selection, emotional placement, and diction (e.g. a ballad carrying a journalistic report, a sonnet in corporate's conclusion-first logic).
 
 ## Rules
 
-- Both profiles' standing rules apply: no reproduced passages, no fabricated attribution.
-- Never claim a blend is what one author "would have written" had they read the other. It's a construction, not a reconstruction.
+- Never claim a blend is what one source "would have written" had it absorbed the other. It's a construction, not a reconstruction.
 - Two influences maximum. Three produces mush.

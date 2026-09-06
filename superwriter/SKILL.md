@@ -1,26 +1,26 @@
 ---
 name: superwriter
-description: Writes new text in a named author's style, a functional register, or a verse form, or rewrites existing text into that style with the meaning preserved. Author voices are Shakespeare, Austen, Hemingway, Woolf, Dickens, Twain, Poe, Wilde, Orwell, Kafka, Melville, Chekhov. Registers are plain English, academic, journalistic, corporate, legal, technical documentation, casual. Verse forms are sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style, blends two influences, and proofreads text for spelling and grammar errors while leaving its style untouched. Use when the user asks to write or rewrite text in an author's voice, a register, or a verse form, make writing sound like a specific writer, make text plainer / more academic / newsier / more corporate / more legal / more casual, analyze a piece of writing's style, fix grammar and spelling, or invokes /superwriter, e.g. "write this as Hemingway would," "make this sound Victorian," "put this in plain English," "rewrite this as a sonnet," "fix the grammar and spelling in this," "make this sound like a text to a friend," "what's my writing style?"
+description: Writes new text in a functional register or a verse form, or rewrites existing text into that style with the meaning preserved. Registers are plain English, academic, journalistic, corporate, legal, technical documentation, casual. Verse forms are sonnet, blank verse, heroic couplet, ballad, free verse, haiku. Also profiles the user's own style, blends two influences, and proofreads text for spelling and grammar errors while leaving its style untouched. Use when the user asks to write or rewrite text in a register or a verse form, make text plainer / more academic / newsier / more corporate / more legal / more casual, analyze a piece of writing's style, fix grammar and spelling, or invokes /superwriter, e.g. "put this in plain English," "rewrite this as a sonnet," "make this sound more corporate," "fix the grammar and spelling in this," "make this sound like a text to a friend," "what's my writing style?"
 ---
 
 # Superwriter
 
 ## Modes
 
-**Generate:** new writing in a voice. `/superwriter Shakespeare: a letter declining a dinner invitation`
-**Transform:** supplied text rewritten in a voice. `[pasted text] /superwriter Shakespeare`
+**Generate:** new writing in a voice. `/superwriter corporate: a note declining a meeting invite`
+**Transform:** supplied text rewritten in a voice. `[pasted text] /superwriter plain English`
 
 Detect by whether substantial source text is present. Ambiguous: short prompt = generate, over a paragraph = transform.
 
-A "voice" is a named author, a functional **register**, or a verse **form**, and once you've made one, a **custom** profile of your own. Both modes work with any of them.
+A "voice" is a functional **register** or a verse **form**, and once you've made one, a **custom** profile of your own. Both modes work with any of them.
 
 An optional strength may follow the voice name: `light`, `medium` (default), or `strong`; see **Strength** below.
 
-Transform also takes an optional trailing length target: `to <N> words` or a range like `to 80-100 words`, e.g. `/superwriter Orwell to 100 words`. See `references/transform.md`.
+Transform also takes an optional trailing length target: `to <N> words` or a range like `to 80-100 words`, e.g. `/superwriter journalistic to 100 words`. See `references/transform.md`.
 
 ## Routing
 
-Read `references/craft-dimensions.md` and `references/house-style.md` plus **one** profile, resolved by name against `authors/`, then `registers/`, then `custom/`. A **verse form** request reads `references/form-dimensions.md` and `references/house-style.md` plus one `references/forms/<name>.md` (no `craft-dimensions.md`). A blend reads two profiles. `/superwriter list` and a bare `--example` read only their own file (see the table).
+Read `references/craft-dimensions.md` and `references/house-style.md` plus **one** profile, resolved by name against `registers/`, then `custom/`. A **verse form** request reads `references/form-dimensions.md` and `references/house-style.md` plus one `references/forms/<name>.md` (no `craft-dimensions.md`). A blend reads two profiles. `/superwriter list` and a bare `--example` read only their own file (see the table).
 
 | Also read | When |
 |---|---|
@@ -33,7 +33,7 @@ Read `references/craft-dimensions.md` and `references/house-style.md` plus **one
 
 ## Commands
 
-`/superwriter <author|register|form> [light|medium|strong]` · `/superwriter <voice> --example` · `/superwriter list` · `/superwriter analyze` · `/superwriter analyze as <name>` · `/superwriter blend <a> + <b>` · `/superwriter proofread`
+`/superwriter <register|form> [light|medium|strong]` · `/superwriter <voice> --example` · `/superwriter list` · `/superwriter analyze` · `/superwriter analyze as <name>` · `/superwriter blend <a> + <b>` · `/superwriter proofread`
 
 ## Strength
 
@@ -47,8 +47,6 @@ Non-signature dimensions stay near neutral at every strength.
 
 ## Voices
 
-**Authors:** Shakespeare · Austen · Hemingway · Woolf · Dickens · Twain · Poe · Wilde · Orwell · Kafka · Melville · Chekhov
-
 **Registers:** Plain English · Academic · Journalistic · Corporate · Legal · Technical · Casual
 
 **Forms:** Sonnet · Blank verse · Heroic couplet · Ballad · Free verse · Haiku
@@ -61,16 +59,13 @@ No profile for what's requested: say so, offer the nearest, or work from a passa
 
 ## Central rule: style is not tics
 
-Default failure: Hemingway becomes short sentences about drinking, Woolf becomes semicolons and weather, Shakespeare becomes *forsooth* over modern syntax. Registers and forms fail the same way. Surface features are the most quotable and least important part of a voice.
+Default failure: legal becomes archaic boilerplate no clearer than plain prose, a sonnet becomes forced rhyme with no real argument underneath, corporate becomes buzzword salad with no decision in it. Every register and form fails the same way. Surface features are the most quotable and least important part of a voice.
 
 ## Standing rules
 
-- **No reproduced passages.** Write in the manner; never quote or reconstruct the author's actual sentences.
-- **No fabricated attribution.** Output is pastiche; decline forged letters or quotes attributed to the author.
 - **`analyze as` is you.** Build a custom profile only from the user's own writing; decline a named profile built for someone else. See `references/analysis.md`.
 - **Transform: meaning is fixed.** Preserve every claim, fact, name, number, and the argument's order. Verify before returning.
-- **Archaic register is not archaic vocabulary.** Match syntax and habits of thought. *Thee* and *hath* over modern structure is the caricature failure in pure form.
-- **Flag bad fits** in one line (e.g. technical docs in Woolf's manner), then proceed if asked.
+- **Flag bad fits** in one line (e.g. legal drafting rewritten as casual), then proceed if asked.
 - **Never invent** detail the source lacked to satisfy a style's rhythm. Leave the gap.
 - **Proofread fixes errors, not style.** Spelling, grammar, and punctuation only; voice, diction, and structure stay exactly as the writer left them. See `references/proofread.md`.
 

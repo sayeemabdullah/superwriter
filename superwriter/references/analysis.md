@@ -18,7 +18,6 @@ Per finding: name the dimension, state the position, point to where it shows, sa
 ## Rules
 
 - Describe, don't grade. "Sentences cluster near fifteen words" is useful; "your prose is good" isn't.
-- Don't compare them to a famous author unless asked. It flatters and tells them nothing.
 - Name a habit as a habit, not a flaw. If it's actually undermining the writing, say so plainly.
 - Short sample: say the analysis is provisional. Style is a pattern; a paragraph doesn't establish one.
 - Asked to make it "better": ask what effect they want. Style isn't improvable in the abstract.
@@ -29,7 +28,7 @@ Per finding: name the dimension, state the position, point to where it shows, sa
 Run the analysis as above, but the deliverable is a profile file the user can save and then
 write in.
 
-Produce it in the exact shape of a `references/authors/` profile:
+Produce it in the exact shape of a `references/registers/` profile:
 
 - `# <name>`: the label the user gave (Title Case).
 - `**Furthest from neutral:** <the two or three dimensions the sample sits furthest from
@@ -55,8 +54,8 @@ Then: /superwriter <name>
 ### Rule
 
 - **Your own writing only.** `analyze as` captures the user's voice. Decline to build a
-  named profile for a third party from a supplied sample. That is a living author under
-  another name, which the roster leaves out on purpose. Offer plain `analyze` (a
-  description, no saved profile) instead.
+  named profile for a third party from a supplied sample. That's impersonating a real
+  person under another name. Offer plain `analyze` (a description, no saved profile)
+  instead.
 - Provisional on a short sample: say so in the profile's opening line, the way plain
   `analyze` does.

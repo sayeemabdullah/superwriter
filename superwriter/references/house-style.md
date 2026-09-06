@@ -44,5 +44,5 @@ of machine-made text; removing them is most of what makes output read as human.
 ## When the voice and the house style conflict
 
 The voice wins on rhythm, syntax, diction register, and figurative habit. The house style
-wins on the specific tells above. A period-heavy Hemingway pastiche and a long-sentence
-Woolf pastiche both obey this file, and neither needs a dash to do it.
+wins on the specific tells above. A clipped corporate memo and a long-sentence academic
+paragraph both obey this file, and neither needs a dash to do it.
