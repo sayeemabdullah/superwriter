@@ -103,7 +103,9 @@ on a normal request.
 
 ### `/superwriter list`
 
-Prints every voice with its defining trait, from the generated `references/voices.md`.
+The entry point if you're not sure where to start: a one-line usage example for each mode
+and command, then every voice with its defining trait. All from the generated
+`references/voices.md`.
 
 ### `/superwriter analyze`
 
@@ -301,6 +303,9 @@ Each release is a GitHub Release with `superwriter.skill` attached; install the 
   reproduced passages, no fabricated attribution) are gone with them, since nothing left
   imitates a real person. `SKILL.md` shrank from 6.4 KB to 5.7 KB and the enforced
   per-request ceiling dropped from 13 KB to 12.5 KB.
+- **v11:** `/superwriter list` leads with a Quick start block, a one-line usage example for
+  each mode and command, above the voices table. Baked into `scripts/build_index.sh` rather
+  than `SKILL.md`, so it costs nothing on any request except `list` itself.
 
 ## Development
 
@@ -327,8 +332,8 @@ with `superwriter.skill` attached.
 ### Cutting a release
 
 ```
-git tag v10
-git push origin v10
+git tag v11
+git push origin v11
 ```
 
 ### Adding a register or form
